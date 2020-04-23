@@ -1,3 +1,7 @@
+// Author Gregory Berardi
+// 04/22/2020
+// BagTest.ino
+// Code to test the Ambu Bag and Ventilator Fixture
 #include <Wire.h>
 #include <LiquidCrystal_I2C.h>
 #include <Encoder.h>
@@ -12,22 +16,23 @@
 #define CLOSE       HIGH
 #define OPEN        LOW
 
-Encoder myEnc(18, 19);  // use interrupt pins
-uint8_t oldSW, newSW;
-bool updateDisplay = true;
-uint8_t dir = CLOSE;
-long minPosition, maxPosition;
+uint8_t dir;
+//long minPosition, maxPosition;
 long newPosition;
 long maxOpenPos;
 long closePos;
-int pwmSpeed = 87;
+int pwmSpeed;
 uint8_t openSwState;
 uint8_t closeSwState;
-long cycleCount = 0;
+long cycleCount;
 unsigned long lastTime;
 
+Encoder myEnc(18, 19);  // use interrupt pins
 LiquidCrystal_I2C lcd(0x27, 20, 4); // set the LCD address to 0x27 for a 16 chars and 2 line display
 
+/******************************************************************************/
+/* Setup                                                                      */
+/******************************************************************************/
 void setup()
 {
   lcd.init();                      // initialize the lcd
@@ -41,18 +46,24 @@ void setup()
   delay(3000);
   Serial.begin(115200);
   Serial << "Ambu Bag Fixture Starting!" << endl;
-  oldSW = newSW = digitalRead(INPIN);
   pinMode(PWM_PIN, OUTPUT);
   pinMode(DIR_PIN, OUTPUT);
   pinMode(OPEN_SW, INPUT_PULLUP);
   pinMode(CLOSED_SW, INPUT_PULLUP);
+
+  dir = CLOSE;
+  pwmSpeed = 87;
   
-  minPosition = maxPosition = 0;
+//  minPosition = maxPosition = 0;
+
   doHome();
   lastTime = millis();
+  cycleCount = 0;
 }
 
-// The main loop
+/******************************************************************************/
+/* Main Loop                                                                  */
+/******************************************************************************/
 void loop()
 {
   newPosition = myEnc.read();
@@ -78,12 +89,17 @@ void loop()
     Serial << (openSwState==0?"Failed Open":"Failed Closed") << endl;
   }
   
-  newPosition > maxPosition ? maxPosition = newPosition : maxPosition;
-  newPosition < minPosition ? minPosition = newPosition : minPosition;
+//  newPosition > maxPosition ? maxPosition = newPosition : maxPosition;
+//  newPosition < minPosition ? minPosition = newPosition : minPosition;
 }
 
-// Home the fixture
-// get open and close counts
+
+/******************************************************************************/
+/* Home                                                                       */
+/*                                                                            */
+/* home the jaws by opening fully and calculate the min/max jaw position      */
+/******************************************************************************/
+
 void doHome(void) {
   uint8_t homeSpeed = 25; // go slow
 
@@ -109,14 +125,22 @@ void doHome(void) {
   Serial << "pwmSpeed:" << pwmSpeed << endl;
 }
 
-// When transitioning from open to close and visa versa these are redundent
+/******************************************************************************/
+/* Transition from open to close                                              */
+/*                                                                            */
+/* When transitioning from open to close and visa versa these are redundant   */
+/******************************************************************************/
 void doTransition(void) {
   digitalWrite(DIR_PIN, dir);
   analogWrite(PWM_PIN, pwmSpeed);
   displayLCD();
 }
 
-// display data to the LCD
+/******************************************************************************/
+/* Transition from open to close                                              */
+/*                                                                            */
+/* display data to the LCD                                                    */
+/******************************************************************************/
 void displayLCD(void) {
   lcd.clear(); //display status of motor on LCD
   lcd.setCursor(0, 0);
@@ -125,7 +149,6 @@ void displayLCD(void) {
   lcd.setCursor(0, 1);
   lcd.print("OPEN POS:");
   lcd.print(maxOpenPos);
-
   lcd.setCursor(0, 2);
   lcd.print("POS:");
   lcd.print(newPosition);
