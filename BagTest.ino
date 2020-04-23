@@ -1,7 +1,9 @@
-// Author Gregory Berardi
-// 04/22/2020
-// BagTest.ino
-// Code to test the Ambu Bag and Ventilator Fixture
+/******************************************************************************/
+/* BagTest.ino                                                                */
+/* Author Gregory Berardi                                                     */
+/* 04/22/2020                                                                 */
+/* Code to test the Ambu Bag and Ventilator Fixture                           */
+/******************************************************************************/
 #include <Wire.h>
 #include <LiquidCrystal_I2C.h>
 #include <Encoder.h>
@@ -28,14 +30,14 @@ long cycleCount;
 unsigned long lastTime;
 
 Encoder myEnc(18, 19);  // use interrupt pins
-LiquidCrystal_I2C lcd(0x27, 20, 4); // set the LCD address to 0x27 for a 16 chars and 2 line display
+LiquidCrystal_I2C lcd(0x27, 20, 4); // LCD address 0x27 20 chars 4 line display
 
 /******************************************************************************/
 /* Setup                                                                      */
 /******************************************************************************/
 void setup()
 {
-  lcd.init();                      // initialize the lcd
+  lcd.init();
   lcd.backlight();
   lcd.home();
 
@@ -51,13 +53,13 @@ void setup()
   pinMode(OPEN_SW, INPUT_PULLUP);
   pinMode(CLOSED_SW, INPUT_PULLUP);
 
-  dir = CLOSE;
-  pwmSpeed = 87;
   
 //  minPosition = maxPosition = 0;
 
   doHome();
+  dir = CLOSE;
   lastTime = millis();
+  pwmSpeed = 87;
   cycleCount = 0;
 }
 
@@ -95,11 +97,10 @@ void loop()
 
 
 /******************************************************************************/
-/* Home                                                                       */
+/* doHome                                                                     */
 /*                                                                            */
 /* home the jaws by opening fully and calculate the min/max jaw position      */
 /******************************************************************************/
-
 void doHome(void) {
   uint8_t homeSpeed = 25; // go slow
 
@@ -126,7 +127,7 @@ void doHome(void) {
 }
 
 /******************************************************************************/
-/* Transition from open to close                                              */
+/* doTransition                                                               */
 /*                                                                            */
 /* When transitioning from open to close and visa versa these are redundant   */
 /******************************************************************************/
@@ -137,7 +138,7 @@ void doTransition(void) {
 }
 
 /******************************************************************************/
-/* Transition from open to close                                              */
+/* displayLCD                                                                 */
 /*                                                                            */
 /* display data to the LCD                                                    */
 /******************************************************************************/
