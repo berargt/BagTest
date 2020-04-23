@@ -10,6 +10,8 @@
 #include <stdio.h>
 #include <Streaming.h> // cout <iosstream> functionality using Serial << endl;
 
+#define SPEED       100
+
 #define INPIN       4
 #define OPEN_SW     9
 #define CLOSED_SW   8
@@ -59,7 +61,7 @@ void setup()
   doHome();
   dir = CLOSE;
   lastTime = millis();
-  pwmSpeed = 87;
+  pwmSpeed = SPEED;
   cycleCount = 0;
 }
 
@@ -119,7 +121,14 @@ void doHome(void) {
     lcd.setCursor(0, 2); lcd.print("POS:"); lcd.print(maxOpenPos);
   } while (openSwState == 1);
 
-  analogWrite(PWM_PIN, 0);      // Stop the motor
+  lcd.setCursor(0, 3); lcd.print("Done!");
+  
+  // Start Closing to avoid switch closure detection
+  digitalWrite(DIR_PIN, CLOSE);
+  analogWrite(PWM_PIN, SPEED);
+
+  delay(100);
+  
   maxOpenPos = myEnc.read() + 50;
   closePos = maxOpenPos + 500;
   Serial << "maxOpenPos:" << maxOpenPos << endl << "closePos:" << closePos << endl;
