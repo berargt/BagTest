@@ -10,11 +10,11 @@
 #include <stdio.h>
 #include <Streaming.h> // cout <iosstream> functionality using Serial << endl;
 
-#define SPEED       90
+#define SPEED       85
 
-#define INPIN       4
 #define OPEN_SW     9
 #define CLOSED_SW   8
+#define PAUSE_SW    4
 #define PWM_PIN     3
 #define DIR_PIN     2
 #define CLOSE       HIGH
@@ -45,7 +45,7 @@ void setup()
 
   lcd.print("Initializing...");
   lcd.setCursor(0, 1);
-  pinMode(INPIN, INPUT);
+  pinMode(PAUSE_SW, INPUT_PULLUP);
   lcd.print("Ambu Bag Fixture!");
   delay(3000);
   Serial.begin(115200);
@@ -92,7 +92,7 @@ void loop()
     pwmSpeed = 0; // stop the fixture
     Serial << (openSwState==0?"Failed Open":"Failed Closed") << endl;
   }
-  
+
 //  newPosition > maxPosition ? maxPosition = newPosition : maxPosition;
 //  newPosition < minPosition ? minPosition = newPosition : minPosition;
 }
