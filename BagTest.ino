@@ -10,7 +10,7 @@
 #include <stdio.h>
 #include <Streaming.h> // cout <iosstream> functionality using Serial << endl;
 
-#define SPEED       100
+#define SPEED       90
 
 #define INPIN       4
 #define OPEN_SW     9
