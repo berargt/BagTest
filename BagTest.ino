@@ -130,7 +130,7 @@ void doHome(void) {
   delay(100);
   
   maxOpenPos = myEnc.read() + 50;
-  closePos = maxOpenPos + 500;
+  closePos = maxOpenPos + 300;
   Serial << "maxOpenPos:" << maxOpenPos << endl << "closePos:" << closePos << endl;
   Serial << "pwmSpeed:" << pwmSpeed << endl;
 }
