@@ -14,7 +14,7 @@
 #define OPEN_POS_ADD  100
 #define CLOSE_POS_ADD 410
 #define OPEN_DWELL    300
-#define TGT_CYC_MS    900
+#define TGT_CYC_MS    800
 #define TGT_HST       10
 
 #define OPEN_SW       9
