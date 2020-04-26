@@ -10,7 +10,9 @@
 #include <stdio.h>
 #include <Streaming.h> // cout <iosstream> functionality using Serial << endl;
 
-#define SPEED       85
+#define SPEED       200
+#define OPEN_POS_ADDER 25
+#define CLOSE_POS_ADDER 325
 
 #define OPEN_SW     9
 #define CLOSED_SW   8
@@ -55,9 +57,6 @@ void setup()
   pinMode(OPEN_SW, INPUT_PULLUP);
   pinMode(CLOSED_SW, INPUT_PULLUP);
 
-  
-//  minPosition = maxPosition = 0;
-
   doHome();
   dir = CLOSE;
   lastTime = millis();
@@ -92,9 +91,6 @@ void loop()
     pwmSpeed = 0; // stop the fixture
     Serial << (openSwState==0?"Failed Open":"Failed Closed") << endl;
   }
-
-//  newPosition > maxPosition ? maxPosition = newPosition : maxPosition;
-//  newPosition < minPosition ? minPosition = newPosition : minPosition;
 }
 
 
@@ -128,9 +124,9 @@ void doHome(void) {
   analogWrite(PWM_PIN, SPEED);
 
   delay(100);
-  
-  maxOpenPos = myEnc.read() + 50;
-  closePos = maxOpenPos + 300;
+
+  maxOpenPos = myEnc.read() + OPEN_POS_ADDER;
+  closePos = maxOpenPos + CLOSE_POS_ADDER;
   Serial << "maxOpenPos:" << maxOpenPos << endl << "closePos:" << closePos << endl;
   Serial << "pwmSpeed:" << pwmSpeed << endl;
 }
@@ -142,6 +138,10 @@ void doHome(void) {
 /******************************************************************************/
 void doTransition(void) {
   digitalWrite(DIR_PIN, dir);
+  analogWrite(PWM_PIN, 0);
+  if (dir == CLOSE) {
+    delay(500);
+  }
   analogWrite(PWM_PIN, pwmSpeed);
   displayLCD();
 }
