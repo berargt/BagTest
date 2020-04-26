@@ -10,17 +10,20 @@
 #include <stdio.h>
 #include <Streaming.h> // cout <iosstream> functionality using Serial << endl;
 
-#define SPEED       200
-#define OPEN_POS_ADDER 25
-#define CLOSE_POS_ADDER 325
+#define SPEED         150
+#define OPEN_POS_ADD  100
+#define CLOSE_POS_ADD 410
+#define OPEN_DWELL    300
+#define TGT_CYC_MS    900
+#define TGT_HST       10
 
-#define OPEN_SW     9
-#define CLOSED_SW   8
-#define PAUSE_SW    4
-#define PWM_PIN     3
-#define DIR_PIN     2
-#define CLOSE       HIGH
-#define OPEN        LOW
+#define OPEN_SW       9
+#define CLOSED_SW     8
+#define PAUSE_SW      4
+#define PWM_PIN       3
+#define DIR_PIN       2
+#define CLOSE         HIGH
+#define OPEN          LOW
 
 uint8_t dir;
 //long minPosition, maxPosition;
@@ -32,6 +35,7 @@ uint8_t openSwState;
 uint8_t closeSwState;
 long cycleCount;
 unsigned long lastTime;
+unsigned long cycleTime;
 
 Encoder myEnc(18, 19);  // use interrupt pins
 LiquidCrystal_I2C lcd(0x27, 20, 4); // LCD address 0x27 20 chars 4 line display
@@ -80,8 +84,15 @@ void loop()
   } else if (newPosition < maxOpenPos && dir == OPEN) {
     dir = CLOSE;
     cycleCount++;
+    cycleTime = millis()-lastTime;
+    // let's try to hit a target speed
+    if (cycleTime > (TGT_CYC_MS + TGT_HST)) {
+      closePos--;
+    } else if (cycleTime < (TGT_CYC_MS - TGT_HST)) {
+      closePos++;
+    }
     doTransition();
-    Serial << "CYC:" << cycleCount << " Time:" << millis()-lastTime << endl;
+    Serial << "CYC:" << cycleCount << " Time:" << cycleTime << endl;
     lastTime = millis();
   }
   openSwState = digitalRead(OPEN_SW);
@@ -125,8 +136,8 @@ void doHome(void) {
 
   delay(100);
 
-  maxOpenPos = myEnc.read() + OPEN_POS_ADDER;
-  closePos = maxOpenPos + CLOSE_POS_ADDER;
+  maxOpenPos = myEnc.read() + OPEN_POS_ADD;
+  closePos = maxOpenPos + CLOSE_POS_ADD;
   Serial << "maxOpenPos:" << maxOpenPos << endl << "closePos:" << closePos << endl;
   Serial << "pwmSpeed:" << pwmSpeed << endl;
 }
@@ -140,7 +151,7 @@ void doTransition(void) {
   digitalWrite(DIR_PIN, dir);
   analogWrite(PWM_PIN, 0);
   if (dir == CLOSE) {
-    delay(500);
+    delay(OPEN_DWELL); // dwell for open but we are transitioning to closed
   }
   analogWrite(PWM_PIN, pwmSpeed);
   displayLCD();
