@@ -66,6 +66,9 @@ void setup()
   lastTime = millis();
   pwmSpeed = SPEED;
   cycleCount = 0;
+  
+  digitalWrite(DIR_PIN, dir);
+  analogWrite(PWM_PIN, pwmSpeed);
 }
 
 /******************************************************************************/
@@ -74,9 +77,6 @@ void setup()
 void loop()
 {
   newPosition = myEnc.read();
-
-  digitalWrite(DIR_PIN, dir);
-  analogWrite(PWM_PIN, pwmSpeed);
 
   if (newPosition > closePos && dir == CLOSE) {
     dir = OPEN;
@@ -92,7 +92,7 @@ void loop()
       closePos++;
     }
     doTransition();
-    Serial << "CYC:" << cycleCount << " Time:" << cycleTime << endl;
+    Serial << cycleCount << "," << cycleTime << "," << closePos << endl;
     lastTime = millis();
   }
   openSwState = digitalRead(OPEN_SW);
@@ -102,6 +102,9 @@ void loop()
     pwmSpeed = 0; // stop the fixture
     Serial << (openSwState==0?"Failed Open":"Failed Closed") << endl;
   }
+  
+  digitalWrite(DIR_PIN, dir);
+  analogWrite(PWM_PIN, pwmSpeed);
 }
 
 
