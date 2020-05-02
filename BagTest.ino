@@ -10,7 +10,7 @@
 #include <stdio.h>
 #include <Streaming.h> // cout <iosstream> functionality using Serial << endl;
 
-#define SPEED         150
+#define SPEED         200
 #define OPEN_POS_ADD  100
 #define CLOSE_POS_ADD 400
 #define OPEN_DWELL    1250
@@ -28,6 +28,7 @@
 uint8_t dir;
 //long minPosition, maxPosition;
 long newPosition;
+long lastPosition;
 long maxOpenPos;
 long closePos;
 int pwmSpeed;
@@ -87,7 +88,7 @@ void loop()
     cycleTime = millis()-lastTime;
     // let's try to hit a target speed
     if (cycleTime > (TGT_CYC_MS + TGT_HST)) {
-      closePos--;
+      closePos-=10;
     } else if (cycleTime < (TGT_CYC_MS - TGT_HST)) {
       closePos++;
     }
@@ -95,6 +96,14 @@ void loop()
     Serial << cycleCount << "," << cycleTime << "," << closePos << endl;
     lastTime = millis();
   }
+
+  if(newPosition == lastPosition) {
+//    lcd.setCursor(7, 0);lcd.print("      ");
+    lcd.setCursor(7, 0);lcd.print(newPosition);
+  }
+
+  lastPosition=newPosition;
+
   openSwState = digitalRead(OPEN_SW);
   closeSwState = digitalRead(CLOSED_SW);
 
@@ -142,7 +151,7 @@ void doHome(void) {
   maxOpenPos = myEnc.read() + OPEN_POS_ADD;
   closePos = maxOpenPos + CLOSE_POS_ADD;
   Serial << "maxOpenPos:" << maxOpenPos << endl << "closePos:" << closePos << endl;
-  Serial << "pwmSpeed:" << pwmSpeed << endl;
+  Serial << "pwmSpeed:" << SPEED << endl;
 }
 
 /******************************************************************************/
@@ -168,8 +177,8 @@ void doTransition(void) {
 void displayLCD(void) {
   lcd.clear(); //display status of motor on LCD
   lcd.setCursor(0, 0);
-  lcd.print("PWM:");
-  lcd.print(pwmSpeed);
+  lcd.print("CURPOS:");
+  lcd.print(newPosition);
   lcd.setCursor(0, 1);
   lcd.print("OPEN POS:");
   lcd.print(maxOpenPos);
