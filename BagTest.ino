@@ -132,9 +132,18 @@ void doHome(void) {
   lcd.setCursor(0, 0);
   lcd.print("Homing...");
 
+  analogWrite(PWM_PIN, homeSpeed);
+  openSwState = digitalRead(OPEN_SW);
+
+  while (openSwState == 0) {
+    digitalWrite(DIR_PIN, CLOSE);
+    openSwState = digitalRead(OPEN_SW);
+  }
+
   dir = OPEN;
   digitalWrite(DIR_PIN, OPEN);
   analogWrite(PWM_PIN, homeSpeed);
+
   
   do {
     openSwState = digitalRead(OPEN_SW);
