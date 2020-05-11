@@ -8,7 +8,8 @@
 #include <LiquidCrystal_I2C.h>
 #include <Encoder.h>
 #include <stdio.h>
-#include <Streaming.h> // cout <iosstream> functionality using Serial << endl;
+#include <Streaming.h>  // cout <iosstream> functionality using Serial << endl;
+#include <avr/wdt.h>    // add the dog
 
 #define SPEED         200
 #define OPEN_POS_ADD  100
@@ -70,6 +71,7 @@ void setup()
   
   digitalWrite(DIR_PIN, dir);
   analogWrite(PWM_PIN, pwmSpeed);
+  wdt_enable(WDTO_8S);
 }
 
 /******************************************************************************/
@@ -114,6 +116,7 @@ void loop()
   
   digitalWrite(DIR_PIN, dir);
   analogWrite(PWM_PIN, pwmSpeed);
+  wdt_reset();// make sure this gets called at least once every 8 seconds!
 }
 
 
