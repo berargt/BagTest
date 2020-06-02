@@ -170,6 +170,7 @@ void doHome(void) {
   while (openSwState == 0) {
     digitalWrite(DIR_PIN, CLOSE);
     openSwState = digitalRead(OPEN_SW);
+    wdog_reset();
   }
 
   dir = OPEN;
@@ -182,6 +183,7 @@ void doHome(void) {
     lcd.setCursor(0, 1); lcd.print("SW:");lcd.print(openSwState);
     maxOpenPos = myEnc.read();
     lcd.setCursor(0, 2); lcd.print("POS:"); lcd.print(maxOpenPos);
+    wdog_reset();
   } while (openSwState == 1);
 
   lcd.setCursor(0, 3); lcd.print("Done!");

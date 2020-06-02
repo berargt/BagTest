@@ -4,7 +4,7 @@
 // Watchdog setup and configuration
 
 void wdog_start(){
-  wdt_enable(WDTO_250MS);
+  wdt_enable(WDTO_2S);
 }
 
 void wdog_reset(){
