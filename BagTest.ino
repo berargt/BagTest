@@ -254,7 +254,5 @@ void markLoopEnd(){
 // Communication with RaspberryPi
 
 void sendPiData(float val1, float val2, float val3){
-  char sendPacket[75];
-  Serial << val1 << val2 << val3;
-  Serial.println(sendPacket);
+  Serial << val1 << "," << val2 << "," << val3 << endl;
 }
