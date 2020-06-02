@@ -12,6 +12,8 @@
 #include <Adafruit_BME280.h>
 #include <Streaming.h>  // cout <iosstream> functionality using Serial << endl;
 #include <avr/wdt.h>    // add the dog
+#include "fs6122.h"
+#include "wdog.h"
 
 // defines
 #define SPEED         200
@@ -53,23 +55,6 @@ unsigned long loopCounter = 0;
 Adafruit_BME280 bme; 
 Encoder myEnc(18, 19);  // use interrupt pins
 LiquidCrystal_I2C lcd(0x27, 20, 4); // LCD address 0x27 20 chars 4 line display
-
-//////////////////////////////////////////////////////
-// Watchdog setup and configuration
-
-void wdog_start(){
-  wdt_enable(WDTO_250MS);
-}
-
-void wdog_reset(){
-  wdt_reset();
-}
-
-// watchdog reset handler
-//isr(wdt_vect)
-//{
-  // todo - write to eeprom? something to track the fact we are resetting unexpectedly
-//}
 
 /******************************************************************************/
 /* Setup                                                                      */
@@ -271,66 +256,6 @@ void markLoopEnd(){
     loopOverruns++;
     cpuLoad = 100.0;
   }
-}
-
-//////////////////////////////////////////////////////
-// Siargo Ltd fs6122 sensor
-// see https://www.servoflo.com/download-archive/data-sheets/254-mass-flow-vacuum-sensors/1220-fs6122-datasheet
-// and https://www.servoflo.com/download-archive/application-notes/212-mass-flow/1256-fs-i2c-communication
-// and https://www.digikey.com/product-detail/en/siargo-ltd/FS6122-250F250-0P0-0/2257-FS6122-250F250-0P0-0-ND/11657804?utm_adgroup=Siargo%20Ltd&utm_source=google&utm_medium=cpc&utm_campaign=Shopping_DK%2BSupplier_Other&utm_term=&utm_content=Siargo%20Ltd&gclid=EAIaIQobChMIkJmP45_c6QIVCtvACh1LvwBoEAYYASABEgL9X_D_BwE
-#define FS6122_ADDRESS 0x01 //Default
-#define FS6122_FILTER_DEPTH 32 //0-128
-#define FS6122_CMD_WRITE_FILTER_DEPTH byte(0x0B)
-#define FS6122_CMD_CAL_FLOW_RATE byte(0x1C)
-#define FS6122_CMD_CAL_PRESSURE byte(0x24)
-#define FS6122_CMD_READ_FLOW_RATE byte(0x83)
-
-void fs6122_init(){
-  Wire.begin();
-
-  //Configure filter depth
-  Wire.beginTransmission(FS6122_ADDRESS);
-  Wire.write(FS6122_CMD_WRITE_FILTER_DEPTH);
-  Wire.write(byte(FS6122_FILTER_DEPTH));
-  Wire.endTransmission();
-}
-
-void fs6122_zeroFlowCal(){
-  // Must be done when there is guarnteed zero flow in the pipe
-  // This function blocks for up to a second, and should not be done in periodic tasking
-  Wire.beginTransmission(FS6122_ADDRESS);
-  Wire.write(FS6122_CMD_CAL_FLOW_RATE);
-  Wire.write(byte(0xFF)); //arbitrary byte
-  Wire.endTransmission();
-  delay(300);
-
-  Wire.beginTransmission(FS6122_ADDRESS);
-  Wire.write(FS6122_CMD_CAL_PRESSURE);
-  Wire.write(byte(0xFF)); //arbitrary byte
-  Wire.endTransmission();
-  delay(300);
-}
-
-float fs6122_readPressure_SmlpM(){
-  long reading = 0;
-
-  Wire.beginTransmission(FS6122_ADDRESS);
-  Wire.write(FS6122_CMD_READ_FLOW_RATE);
-  Wire.endTransmission();
-
-  Wire.requestFrom(FS6122_ADDRESS, 4); 
-  
-  if (4 <= Wire.available()) { // if two bytes were received
-    for(int byteIdx = 0; byteIdx < 4; byteIdx++){
-      reading = reading << 8;    // shift high byte to be high 8 bits
-      reading |= Wire.read(); // receive low byte as lower 8 bits
-    }
-    return (float)reading;
-  } else {
-    //ERROR - sensor did not return data. TODO - return something meaningful
-    return -42;
-  }
-  
 }
 
 //////////////////////////////////////////////////////
