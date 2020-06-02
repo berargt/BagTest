@@ -29,6 +29,8 @@
 #define CLOSE         HIGH
 #define OPEN          LOW
 
+#define MAIN_LOOP_TS_MS 50
+
 // Globals
 uint8_t dir;
 //long minPosition, maxPosition;
@@ -42,7 +44,10 @@ uint8_t closeSwState;
 long cycleCount;
 unsigned long lastTime;
 unsigned long cycleTime;
-
+long loopStartTime_us = 0;
+double cpuLoad = 0;
+long loopOverruns = 0;
+unsigned long loopCounter = 0;
 
 // Classes
 Adafruit_BME280 bme; 
@@ -104,7 +109,7 @@ void setup()
   
   digitalWrite(DIR_PIN, dir);
   analogWrite(PWM_PIN, pwmSpeed);
-  wdt_start();
+  wdog_start();
 }
 
 /******************************************************************************/
@@ -247,12 +252,6 @@ void displayLCD(void) {
 
 //////////////////////////////////////////////////////
 // Loop Timing
-#define MAIN_LOOP_TS_MS 50
-long loopStartTime_us = 0;
-double cpuLoad = 0;
-long loopOverruns = 0;
-unsigned long loopCounter = 0;
-
 void markLoopStart(){
   loopStartTime_us = micros();
 }
