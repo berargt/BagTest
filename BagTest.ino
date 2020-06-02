@@ -255,9 +255,6 @@ void markLoopEnd(){
 
 void sendPiData(float val1, float val2, float val3){
   char sendPacket[75];
-  sprintf(sendPacket, "%d.%02d,%d.%02d,%d.%02d", //sprintf doesn't support floats, so do some tricks
-  (int)val1,  (abs)((int)(val1*100))%100,
-  (int)val2,  (abs)((int)(val2*100))%100,
-  (int)val3, (abs)((int)(val3*100))%100);
+  Serial << val1 << val2 << val3;
   Serial.println(sendPacket);
 }
