@@ -109,7 +109,9 @@ void loop()
 
   newPosition = myEnc.read();
 
-  sendPiData(ch1Val, ch2Val, ch3Val);
+
+  // Communication with RaspberryPi
+  Serial << ch1Val << "," << ch2Val << "," << ch3Val << endl;
 
   if (newPosition > closePos && dir == CLOSE) {
     dir = OPEN;
@@ -248,11 +250,4 @@ void markLoopEnd(){
     loopOverruns++;
     cpuLoad = 100.0;
   }
-}
-
-//////////////////////////////////////////////////////
-// Communication with RaspberryPi
-
-void sendPiData(float val1, float val2, float val3){
-  Serial << val1 << "," << val2 << "," << val3 << endl;
 }
