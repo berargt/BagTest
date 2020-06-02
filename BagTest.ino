@@ -80,7 +80,6 @@ void setup()
   fs6122_init();
   fs6122_zeroFlowCal();
 
-//  Serial << "Ambu Bag Fixture Starting!" << endl;
   pinMode(PWM_PIN, OUTPUT);
   pinMode(DIR_PIN, OUTPUT);
   pinMode(OPEN_SW, INPUT_PULLUP);
@@ -126,7 +125,6 @@ void loop()
       closePos++;
     }
     doTransition();
-//    Serial << cycleCount << "," << cycleTime << "," << closePos << endl;
     lastTime = millis();
   }
 
@@ -137,7 +135,6 @@ void loop()
 
   if ((openSwState==0 || closeSwState==0) && pwmSpeed != 0) {
     pwmSpeed = 0; // stop the fixture
-//    Serial << (openSwState==0?"Failed Open":"Failed Closed") << endl;
   }
   
   digitalWrite(DIR_PIN, dir);
@@ -191,8 +188,6 @@ void doHome(void) {
 
   maxOpenPos = myEnc.read() + OPEN_POS_ADD;
   closePos = maxOpenPos + CLOSE_POS_ADD;
-//  Serial << "maxOpenPos:" << maxOpenPos << endl << "closePos:" << closePos << endl;
-//  Serial << "pwmSpeed:" << SPEED << endl;
 }
 
 /******************************************************************************/
