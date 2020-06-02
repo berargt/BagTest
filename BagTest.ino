@@ -130,11 +130,6 @@ void loop()
     lastTime = millis();
   }
 
-  if(newPosition == lastPosition) {
-//    lcd.setCursor(7, 0);lcd.print("      ");
-    lcd.setCursor(7, 0);lcd.print(newPosition);
-  }
-
   lastPosition=newPosition;
 
   openSwState = digitalRead(OPEN_SW);
