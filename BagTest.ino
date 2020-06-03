@@ -33,11 +33,15 @@
 
 #define MAIN_LOOP_TS_MS 50
 
+#define  OPEN    0
+#define  DWELL   1
+#define  TRANS   2
+
 // Globals
 uint8_t dir;
 //long minPosition, maxPosition;
 long newPosition;
-long lastPosition;
+//long lastPosition;
 long maxOpenPos;
 long closePos;
 int pwmSpeed;
@@ -85,12 +89,12 @@ void setup()
   pinMode(OPEN_SW, INPUT_PULLUP);
   pinMode(CLOSED_SW, INPUT_PULLUP);
 
-  doHome();
+  Home();
   dir = CLOSE;
   lastTime = millis();
   pwmSpeed = SPEED;
   cycleCount = 0;
-  
+
   digitalWrite(DIR_PIN, dir);
   analogWrite(PWM_PIN, pwmSpeed);
   wdog_start();
@@ -106,52 +110,36 @@ void loop()
   float ch1Val = fs6122_readPressure_SmlpM();
   float ch2Val = bme.readTemperature();
   float ch3Val = cpuLoad;
-
   newPosition = myEnc.read();
-
+  openSwState = digitalRead(OPEN_SW);
+  closeSwState = digitalRead(CLOSED_SW);
 
   // Communication with RaspberryPi
   Serial << ch1Val << "," << ch2Val << "," << ch3Val << endl;
 
-  if (newPosition > closePos && dir == CLOSE) {
-    dir = OPEN;
-    doTransition();
-  } else if (newPosition < maxOpenPos && dir == OPEN) {
-    dir = CLOSE;
-    cycleCount++;
-    cycleTime = millis()-lastTime;
-    // let's try to hit a target speed
-    if (cycleTime > (TGT_CYC_MS + TGT_HST)) {
-      closePos-=10;
-    } else if (cycleTime < (TGT_CYC_MS - TGT_HST)) {
-      closePos++;
-    }
-    doTransition();
-    lastTime = millis();
+  if (dir = CLOSE) {
+    Close();
+  } 
+  else {
+    Open();
   }
 
-  lastPosition=newPosition;
-
-  openSwState = digitalRead(OPEN_SW);
-  closeSwState = digitalRead(CLOSED_SW);
-
-  if ((openSwState==0 || closeSwState==0) && pwmSpeed != 0) {
-    pwmSpeed = 0; // stop the fixture
-  }
-  
   digitalWrite(DIR_PIN, dir);
   analogWrite(PWM_PIN, pwmSpeed);
+
+//  lastPosition=newPosition;
   wdog_reset();
   markLoopEnd();
 }
 
 
 /******************************************************************************/
-/* doHome                                                                     */
+/* Home                                                                       */
 /*                                                                            */
+/* Blocking because it doesn't matter when we home                            */
 /* home the jaws by opening fully and calculate the min/max jaw position      */
 /******************************************************************************/
-void doHome(void) {
+void Home(void) {
   uint8_t homeSpeed = 25; // go slow
 
   lcd.clear(); //display status of motor on LCD
@@ -171,7 +159,7 @@ void doHome(void) {
   digitalWrite(DIR_PIN, OPEN);
   analogWrite(PWM_PIN, homeSpeed);
 
-  
+
   do {
     openSwState = digitalRead(OPEN_SW);
     lcd.setCursor(0, 1); lcd.print("SW:");lcd.print(openSwState);
@@ -181,7 +169,7 @@ void doHome(void) {
   } while (openSwState == 1);
 
   lcd.setCursor(0, 3); lcd.print("Done!");
-  
+
   // Start Closing to avoid switch closure detection
   digitalWrite(DIR_PIN, CLOSE);
   analogWrite(PWM_PIN, SPEED);
@@ -193,19 +181,75 @@ void doHome(void) {
 }
 
 /******************************************************************************/
-/* doTransition                                                               */
+/* Open                                                                       */
 /*                                                                            */
-/* When transitioning from open to close and visa versa these are redundant   */
+/*                                                                            */
 /******************************************************************************/
-void doTransition(void) {
-  digitalWrite(DIR_PIN, dir);
-  analogWrite(PWM_PIN, 0);
-  if (dir == CLOSE) {
-    delay(OPEN_DWELL); // dwell for open but we are transitioning to closed
+void Open(void) {
+
+  static char state = OPEN;
+  static char start_time = 0;
+
+  switch (state)
+  {
+    case OPEN:
+      if (newPosition < maxOpenPos) {
+        state++; // advance to next state
+        start_time = millis();
+      }
+      pwmSpeed = SPEED;
+      break;
+
+    case DWELL:
+      if ((millis() - start_time)  > OPEN_DWELL) {
+        state++; // advance to next state
+      }
+      else {
+        // stop motor
+        pwmSpeed = 0;
+      }
+
+      break;
+
+    case TRANS:
+      dir = CLOSE;
+      cycleCount++;
+      cycleTime = millis()-lastTime;
+
+      // let's try to hit a target speed
+      if (cycleTime > (TGT_CYC_MS + TGT_HST)) {
+        closePos-=10;
+      } else if (cycleTime < (TGT_CYC_MS - TGT_HST)) {
+        closePos++;
+      }
+
+      state = OPEN;
+      pwmSpeed = SPEED;
+      lastTime = millis();
+
+      break;
   }
-  analogWrite(PWM_PIN, pwmSpeed);
+
   displayLCD();
 }
+
+/******************************************************************************/
+/* Close                                                                      */
+/*                                                                            */
+/*                                                                            */
+/******************************************************************************/
+void Close(void) {
+
+  pwmSpeed = SPEED;
+  dir = CLOSE;
+
+  if (newPosition > closePos) {
+    dir = OPEN;
+  }
+
+  displayLCD();
+}
+
 
 /******************************************************************************/
 /* displayLCD                                                                 */
@@ -222,11 +266,11 @@ void displayLCD(void) {
   lcd.print(maxOpenPos);
   lcd.setCursor(0, 2);
   lcd.print("POS:");
-  lcd.print(newPosition);
+  lcd.print(newPosition); // DUPE TBD TODO
   lcd.setCursor(0, 3);
   lcd.print("CLOSE POS:"); lcd.print(closePos);
-//  lcd.print("MIN:"); lcd.print(minPosition);
-//  lcd.print(" MAX:"); lcd.print(maxPosition);
+  //  lcd.print("MIN:"); lcd.print(minPosition);
+  //  lcd.print(" MAX:"); lcd.print(maxPosition);
 }
 
 //////////////////////////////////////////////////////
@@ -242,7 +286,7 @@ void markLoopEnd(){
     if(delayDur > 65529){
       delay(delayDur/1000);
     } else {
-       delayMicroseconds((unsigned int)delayDur);
+      delayMicroseconds((unsigned int)delayDur);
     }
     cpuLoad = 100.0 * ( 1.0 - ((double)delayDur/1000.0)/(double)MAIN_LOOP_TS_MS);
   } else {
