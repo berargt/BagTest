@@ -19,7 +19,7 @@
 #define SPEED         200
 #define OPEN_POS_ADD  100
 #define CLOSE_POS_ADD 400
-#define OPEN_DWELL    1250
+#define OPEN_DWELL    125000
 #define TGT_CYC_MS    750
 #define TGT_HST       10
 
@@ -33,7 +33,7 @@
 
 #define MAIN_LOOP_TS_MS 50
 
-#define  OPEN    0
+#define  OPENING 0
 #define  DWELL   1
 #define  TRANS   2
 
@@ -188,11 +188,11 @@ void Home(void) {
 void Open(void) {
 
   static char state = OPEN;
-  static char start_time = 0;
+  static unsigned long start_time = 0;
 
   switch (state)
   {
-    case OPEN:
+    case OPENING:
       if (newPosition < maxOpenPos) {
         state++; // advance to next state
         start_time = millis();
@@ -223,7 +223,7 @@ void Open(void) {
         closePos++;
       }
 
-      state = OPEN;
+      state = OPENING;
       pwmSpeed = SPEED;
       lastTime = millis();
 
