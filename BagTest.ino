@@ -179,11 +179,24 @@ void Home(void) {
 /******************************************************************************/
 void Sequence(void) {
 
+<<<<<<< HEAD
    static char state = OPENING;
    static char start_time = 0;
 
    if (dir = CLOSE) {
 
+=======
+  static char state = OPEN;
+  static unsigned long start_time = 0;
+
+  switch (state)
+  {
+    case OPENING:
+      if (newPosition < maxOpenPos) {
+        state++; // advance to next state
+        start_time = millis();
+      }
+>>>>>>> 3d1945edbe64bc266485d5894f24119ee3692c79
       pwmSpeed = SPEED;
       dir = CLOSE;
 
@@ -232,7 +245,33 @@ void Sequence(void) {
 
             break;
       }
+<<<<<<< HEAD
    }
+=======
+
+      break;
+
+    case TRANS:
+      dir = CLOSE;
+      cycleCount++;
+      cycleTime = millis()-lastTime;
+
+      // let's try to hit a target speed
+      if (cycleTime > (TGT_CYC_MS + TGT_HST)) {
+        closePos-=10;
+      } else if (cycleTime < (TGT_CYC_MS - TGT_HST)) {
+        closePos++;
+      }
+
+      state = OPENING;
+      pwmSpeed = SPEED;
+      lastTime = millis();
+
+      break;
+  }
+
+  displayLCD();
+>>>>>>> 3d1945edbe64bc266485d5894f24119ee3692c79
 }
 
 /******************************************************************************/
