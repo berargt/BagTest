@@ -114,7 +114,8 @@ void loop()
   closeSwState = digitalRead(CLOSED_SW);
 
   // Communication with RaspberryPi
-  Serial << millis() << "," << ch1Val << "," << ch2Val << "," << ch3Val << endl;
+  Serial << ch1Val << "," << ch2Val << "," << ch3Val << endl;
+  //Serial << millis() << "," << ch1Val << "," << ch2Val << "," << ch3Val << endl;
 
   Sequence();
 	// DEBUG
