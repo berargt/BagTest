@@ -20,7 +20,7 @@
 #define OPEN_POS_ADD  100
 #define CLOSE_POS_ADD 400
 #define OPEN_DWELL    1250
-#define TGT_CYC_MS    750
+#define TGT_CYC_MS    2000
 #define TGT_HST       10
 
 #define OPEN_SW       9
@@ -116,6 +116,7 @@ void loop()
 //  Serial << ch1Val << "," << ch2Val << "," << ch3Val << endl;
 
   Sequence();
+  Serial << "oPos:" << maxOpenPos << " cPos:" << closePos << " cycleTime:" << cycleTime << " Target:" << TGT_CYC_MS + TGT_HST << endl;
 
   digitalWrite(DIR_PIN, dir);
   analogWrite(PWM_PIN, pwmSpeed);
@@ -187,11 +188,9 @@ void Sequence(void) {
 		if (newPosition > closePos) {
 			dir = OPEN;
 		}
-		Serial << "CLOSE" << endl;
 	} 
 	else {
 
-		Serial << (int)state << endl;
 		switch (state)
 		{
 			case OPENING:
@@ -209,9 +208,7 @@ void Sequence(void) {
 				else {
 					// stop motor
 					pwmSpeed = 0;
-					Serial << "DWELL" << endl;
 				}
-				Serial << millis() << "    " << start_time << endl;
 				break;
 
 			case TRANS:
