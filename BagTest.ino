@@ -16,7 +16,7 @@
 #include "wdog.h"
 
 // defines
-#define SPEED         50
+#define SPEED         150
 #define OPEN_POS_ADD  100
 #define CLOSE_POS_ADD 400
 #define OPEN_DWELL    1250
@@ -71,8 +71,9 @@ void setup()
   lcd.setCursor(0, 1);
   pinMode(PAUSE_SW, INPUT_PULLUP);
   lcd.print("Ambu Bag Fixture!");
+	// This delay is enough time to program if there are issues with the code/programming
   delay(3000);
-  Serial.begin(115200);
+  Serial.begin(9600);
   while(!Serial);    // time to get serial running
 
   //Init BME280 sensor
@@ -113,10 +114,11 @@ void loop()
   closeSwState = digitalRead(CLOSED_SW);
 
   // Communication with RaspberryPi
-//  Serial << ch1Val << "," << ch2Val << "," << ch3Val << endl;
+  Serial << millis() << "," << ch1Val << "," << ch2Val << "," << ch3Val << endl;
 
   Sequence();
-  Serial << "oPos:" << maxOpenPos << " cPos:" << closePos << " cycleTime:" << cycleTime << " Target:" << TGT_CYC_MS + TGT_HST << endl;
+	// DEBUG
+//  Serial << "oPos:" << maxOpenPos << " cPos:" << closePos << " cycleTime:" << cycleTime << " Target:" << TGT_CYC_MS + TGT_HST << endl;
 
   digitalWrite(DIR_PIN, dir);
   analogWrite(PWM_PIN, pwmSpeed);
@@ -215,14 +217,6 @@ void Sequence(void) {
 				dir = CLOSE;
 				cycleCount++;
 				cycleTime = millis()-lastTime;
-
-				// let's try to hit a target speed
-				if (cycleTime > (TGT_CYC_MS + TGT_HST)) {
-					closePos-=10;
-				} else if (cycleTime < (TGT_CYC_MS - TGT_HST)) {
-					closePos++;
-				}
-
 				state = OPENING;
 				pwmSpeed = SPEED;
 				lastTime = millis();
