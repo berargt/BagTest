@@ -39,9 +39,7 @@
 
 // Globals
 uint8_t dir;
-//long minPosition, maxPosition;
 long newPosition;
-//long lastPosition;
 long maxOpenPos;
 long closePos;
 int pwmSpeed;
@@ -117,17 +115,12 @@ void loop()
   // Communication with RaspberryPi
   Serial << ch1Val << "," << ch2Val << "," << ch3Val << endl;
 
-  if (dir = CLOSE) {
-    Close();
-  } 
-  else {
-    Open();
-  }
+  Sequence();
 
   digitalWrite(DIR_PIN, dir);
   analogWrite(PWM_PIN, pwmSpeed);
 
-//  lastPosition=newPosition;
+  displayLCD();
   wdog_reset();
   markLoopEnd();
 }
@@ -181,73 +174,72 @@ void Home(void) {
 }
 
 /******************************************************************************/
-/* Open                                                                       */
-/*                                                                            */
+/* Sequence                                                                   */
 /*                                                                            */
 /******************************************************************************/
-void Open(void) {
+void Sequence(void) {
 
-  static char state = OPEN;
-  static char start_time = 0;
+   static char state = OPEN;
+   static char start_time = 0;
 
-  switch (state)
-  {
-    case OPEN:
-      if (newPosition < maxOpenPos) {
-        state++; // advance to next state
-        start_time = millis();
-      }
+   if (dir = CLOSE) {
+
       pwmSpeed = SPEED;
-      break;
-
-    case DWELL:
-      if ((millis() - start_time)  > OPEN_DWELL) {
-        state++; // advance to next state
-      }
-      else {
-        // stop motor
-        pwmSpeed = 0;
-      }
-
-      break;
-
-    case TRANS:
       dir = CLOSE;
-      cycleCount++;
-      cycleTime = millis()-lastTime;
 
-      // let's try to hit a target speed
-      if (cycleTime > (TGT_CYC_MS + TGT_HST)) {
-        closePos-=10;
-      } else if (cycleTime < (TGT_CYC_MS - TGT_HST)) {
-        closePos++;
+      if (newPosition > closePos) {
+         dir = OPEN;
       }
+   } 
+   else {
 
-      state = OPEN;
-      pwmSpeed = SPEED;
-      lastTime = millis();
+      switch (state)
+      {
+         case OPEN:
+            if (newPosition < maxOpenPos) {
+               state++; // advance to next state
+               start_time = millis();
+            }
+            pwmSpeed = SPEED;
+            break;
 
-      break;
-  }
+         case DWELL:
+            if ((millis() - start_time)  > OPEN_DWELL) {
+               state++; // advance to next state
+            }
+            else {
+               // stop motor
+               pwmSpeed = 0;
+            }
 
-  displayLCD();
+            break;
+
+         case TRANS:
+            dir = CLOSE;
+            cycleCount++;
+            cycleTime = millis()-lastTime;
+
+            // let's try to hit a target speed
+            if (cycleTime > (TGT_CYC_MS + TGT_HST)) {
+               closePos-=10;
+            } else if (cycleTime < (TGT_CYC_MS - TGT_HST)) {
+               closePos++;
+            }
+
+            state = OPEN;
+            pwmSpeed = SPEED;
+            lastTime = millis();
+
+            break;
+      }
+   }
 }
 
 /******************************************************************************/
 /* Close                                                                      */
 /*                                                                            */
-/*                                                                            */
 /******************************************************************************/
 void Close(void) {
-
-  pwmSpeed = SPEED;
-  dir = CLOSE;
-
-  if (newPosition > closePos) {
-    dir = OPEN;
-  }
-
-  displayLCD();
 }
 
 
@@ -269,8 +261,6 @@ void displayLCD(void) {
   lcd.print(newPosition); // DUPE TBD TODO
   lcd.setCursor(0, 3);
   lcd.print("CLOSE POS:"); lcd.print(closePos);
-  //  lcd.print("MIN:"); lcd.print(minPosition);
-  //  lcd.print(" MAX:"); lcd.print(maxPosition);
 }
 
 //////////////////////////////////////////////////////
