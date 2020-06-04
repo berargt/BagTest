@@ -33,7 +33,7 @@
 
 #define MAIN_LOOP_TS_MS 50
 
-#define  OPEN    0
+#define  OPENING 0
 #define  DWELL   1
 #define  TRANS   2
 
@@ -179,7 +179,7 @@ void Home(void) {
 /******************************************************************************/
 void Sequence(void) {
 
-   static char state = OPEN;
+   static char state = OPENING;
    static char start_time = 0;
 
    if (dir = CLOSE) {
@@ -195,7 +195,7 @@ void Sequence(void) {
 
       switch (state)
       {
-         case OPEN:
+         case OPENING:
             if (newPosition < maxOpenPos) {
                state++; // advance to next state
                start_time = millis();
@@ -226,7 +226,7 @@ void Sequence(void) {
                closePos++;
             }
 
-            state = OPEN;
+            state = OPENING;
             pwmSpeed = SPEED;
             lastTime = millis();
 
@@ -234,14 +234,6 @@ void Sequence(void) {
       }
    }
 }
-
-/******************************************************************************/
-/* Close                                                                      */
-/*                                                                            */
-/******************************************************************************/
-void Close(void) {
-}
-
 
 /******************************************************************************/
 /* displayLCD                                                                 */
