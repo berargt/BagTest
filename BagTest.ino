@@ -19,7 +19,7 @@
 #define SPEED         200
 #define OPEN_POS_ADD  100
 #define CLOSE_POS_ADD 400
-#define OPEN_DWELL    125000
+#define OPEN_DWELL    1250
 #define TGT_CYC_MS    750
 #define TGT_HST       10
 
