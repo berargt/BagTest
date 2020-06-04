@@ -16,7 +16,7 @@
 #include "wdog.h"
 
 // defines
-#define SPEED         200
+#define SPEED         50
 #define OPEN_POS_ADD  100
 #define CLOSE_POS_ADD 400
 #define OPEN_DWELL    1250
@@ -113,7 +113,7 @@ void loop()
   closeSwState = digitalRead(CLOSED_SW);
 
   // Communication with RaspberryPi
-  Serial << ch1Val << "," << ch2Val << "," << ch3Val << endl;
+//  Serial << ch1Val << "," << ch2Val << "," << ch3Val << endl;
 
   Sequence();
 
@@ -124,7 +124,6 @@ void loop()
   wdog_reset();
   markLoopEnd();
 }
-
 
 /******************************************************************************/
 /* Home                                                                       */
@@ -179,99 +178,61 @@ void Home(void) {
 /******************************************************************************/
 void Sequence(void) {
 
-<<<<<<< HEAD
-   static char state = OPENING;
-   static char start_time = 0;
+	static char state = OPENING;
+	static unsigned long start_time = 0;
 
-   if (dir = CLOSE) {
+	if (dir == CLOSE) {
+		pwmSpeed = SPEED;
 
-=======
-  static char state = OPEN;
-  static unsigned long start_time = 0;
+		if (newPosition > closePos) {
+			dir = OPEN;
+		}
+		Serial << "CLOSE" << endl;
+	} 
+	else {
 
-  switch (state)
-  {
-    case OPENING:
-      if (newPosition < maxOpenPos) {
-        state++; // advance to next state
-        start_time = millis();
-      }
->>>>>>> 3d1945edbe64bc266485d5894f24119ee3692c79
-      pwmSpeed = SPEED;
-      dir = CLOSE;
+		Serial << (int)state << endl;
+		switch (state)
+		{
+			case OPENING:
+				if (newPosition < maxOpenPos) {
+					state = DWELL; // advance to next state
+					start_time = millis();
+				}
+				pwmSpeed = SPEED;
+				break;
 
-      if (newPosition > closePos) {
-         dir = OPEN;
-      }
-   } 
-   else {
+			case DWELL:
+				if ((millis() - start_time)  > OPEN_DWELL) {
+					state = TRANS; // advance to next state
+				}
+				else {
+					// stop motor
+					pwmSpeed = 0;
+					Serial << "DWELL" << endl;
+				}
+				Serial << millis() << "    " << start_time << endl;
+				break;
 
-      switch (state)
-      {
-         case OPENING:
-            if (newPosition < maxOpenPos) {
-               state++; // advance to next state
-               start_time = millis();
-            }
-            pwmSpeed = SPEED;
-            break;
+			case TRANS:
+				dir = CLOSE;
+				cycleCount++;
+				cycleTime = millis()-lastTime;
 
-         case DWELL:
-            if ((millis() - start_time)  > OPEN_DWELL) {
-               state++; // advance to next state
-            }
-            else {
-               // stop motor
-               pwmSpeed = 0;
-            }
+				// let's try to hit a target speed
+				if (cycleTime > (TGT_CYC_MS + TGT_HST)) {
+					closePos-=10;
+				} else if (cycleTime < (TGT_CYC_MS - TGT_HST)) {
+					closePos++;
+				}
 
-            break;
+				state = OPENING;
+				pwmSpeed = SPEED;
+				lastTime = millis();
 
-         case TRANS:
-            dir = CLOSE;
-            cycleCount++;
-            cycleTime = millis()-lastTime;
-
-            // let's try to hit a target speed
-            if (cycleTime > (TGT_CYC_MS + TGT_HST)) {
-               closePos-=10;
-            } else if (cycleTime < (TGT_CYC_MS - TGT_HST)) {
-               closePos++;
-            }
-
-            state = OPENING;
-            pwmSpeed = SPEED;
-            lastTime = millis();
-
-            break;
-      }
-<<<<<<< HEAD
-   }
-=======
-
-      break;
-
-    case TRANS:
-      dir = CLOSE;
-      cycleCount++;
-      cycleTime = millis()-lastTime;
-
-      // let's try to hit a target speed
-      if (cycleTime > (TGT_CYC_MS + TGT_HST)) {
-        closePos-=10;
-      } else if (cycleTime < (TGT_CYC_MS - TGT_HST)) {
-        closePos++;
-      }
-
-      state = OPENING;
-      pwmSpeed = SPEED;
-      lastTime = millis();
-
-      break;
-  }
-
-  displayLCD();
->>>>>>> 3d1945edbe64bc266485d5894f24119ee3692c79
+				break;
+		}
+	}
 }
 
 /******************************************************************************/
