@@ -107,7 +107,7 @@ void loop()
   markLoopStart();
 
   float ch1Val = fs6122_readPressure_SmlpM();
-  float ch2Val = bme.readPressure();
+  float ch2Val = bme.readPressure()/100;
   float ch3Val = cpuLoad;
   newPosition = myEnc.read();
   openSwState = digitalRead(OPEN_SW);
