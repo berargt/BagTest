@@ -1,0 +1,49 @@
+
+[236926.370914] usb 1-1: new full-speed USB device number 5 using xhci_hcd
+[236926.522963] usb 1-1: New USB device found, idVendor=0403, idProduct=6001, bcdDevice= 4.00
+[236926.522965] usb 1-1: New USB device strings: Mfr=1, Product=2, SerialNumber=0
+[236926.522966] usb 1-1: Product: USB <-> Serial
+[236926.522966] usb 1-1: Manufacturer: FTDI
+[236926.551249] usbcore: registered new interface driver usbserial_generic
+[236926.551256] usbserial: USB Serial support registered for generic
+[236926.553916] usbcore: registered new interface driver ftdi_sio
+[236926.553927] usbserial: USB Serial support registered for FTDI USB Serial Device
+[236926.553999] ftdi_sio 1-1:1.0: FTDI USB Serial Device converter detected
+[236926.554028] usb 1-1: Detected FT232BM
+[236926.554186] usb 1-1: FTDI USB Serial Device converter now attached to ttyUSB0
+
+
+greg@gxps:~$ lsmod
+
+Module                  Size  Used by
+ftdi_sio               61440  0
+usbserial              53248  1 ftdi_sio
+
+
+########################################################################################
+greg@gxps:~$ lsmod | grep usb
+usbserial              53248  1 ftdi_sio
+btusb                  57344  0
+btrtl                  20480  1 btusb
+btbcm                  16384  1 btusb
+btintel                24576  1 btusb
+bluetooth             581632  31 btrtl,btintel,btbcm,bnep,btusb,rfcomm
+usbhid                 57344  1 wacom
+hid                   131072  5 i2c_hid,wacom,usbhid,hid_multitouch,hid_generic
+
+
+########################################################################################
+It worked!!!!!!!!
+
+ 2496.319304] usb 1-1.3: USB disconnect, device number 5
+[ 2496.320026] ftdi_sio ttyUSB0: FTDI USB Serial Device converter now disconnected from ttyUSB0
+[ 2496.320126] ftdi_sio 1-1.3:1.0: device disconnected
+[ 2560.868477] usb 1-1.3: new full-speed USB device number 8 using dwc_otg
+[ 2561.014555] usb 1-1.3: New USB device found, idVendor=0403, idProduct=6001, bcdDevice= 4.00
+[ 2561.014571] usb 1-1.3: New USB device strings: Mfr=1, Product=2, SerialNumber=0
+[ 2561.014581] usb 1-1.3: Product: USB <-> Serial
+[ 2561.014590] usb 1-1.3: Manufacturer: FTDI
+[ 2561.025454] ftdi_sio 1-1.3:1.0: FTDI USB Serial Device converter detected
+[ 2561.025624] usb 1-1.3: Detected FT232BM
+[ 2561.026515] usb 1-1.3: FTDI USB Serial Device converter now attached to ttyUSB0
+
