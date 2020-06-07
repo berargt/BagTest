@@ -77,7 +77,7 @@ void setup()
   while(!Serial3);    // time to get serial running
 
   //Init BME280 sensor
-  bme.begin(BME280_ADDRESS);
+  bme.begin(BME280_ADDRESS_ALTERNATE);
 
   //Init Flowmeter
   fs6122_init();
