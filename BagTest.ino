@@ -73,8 +73,8 @@ void setup()
   lcd.print("Ambu Bag Fixture!");
 	// This delay is enough time to program if there are issues with the code/programming
   delay(3000);
-  Serial.begin(115200);
-  while(!Serial);    // time to get serial running
+  Serial3.begin(115200);
+  while(!Serial3);    // time to get serial running
 
   //Init BME280 sensor
   bme.begin(BME280_ADDRESS);
@@ -114,7 +114,7 @@ void loop()
   closeSwState = digitalRead(CLOSED_SW);
 
   // Communication with RaspberryPi
-  Serial << ch1Val << "," << ch2Val << "," << ch3Val << endl;
+  Serial3 << ch1Val << "," << ch2Val << "," << ch3Val << endl;
   //Serial << millis() << "," << ch1Val << "," << ch2Val << "," << ch3Val << endl;
 
   Sequence();
