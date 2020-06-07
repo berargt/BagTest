@@ -118,8 +118,6 @@ void loop()
   //Serial << millis() << "," << ch1Val << "," << ch2Val << "," << ch3Val << endl;
 
   Sequence();
-	// DEBUG
-//  Serial << "oPos:" << maxOpenPos << " cPos:" << closePos << " cycleTime:" << cycleTime << " Target:" << TGT_CYC_MS + TGT_HST << endl;
 
   digitalWrite(DIR_PIN, dir);
   analogWrite(PWM_PIN, pwmSpeed);
@@ -192,8 +190,7 @@ void Sequence(void) {
 			dir = OPEN;
 		}
 	} 
-	else {
-
+	else { // dir == OPEN or something else
 		switch (state)
 		{
 			case OPENING:
@@ -241,10 +238,10 @@ void displayLCD(void) {
   lcd.print("OPEN POS:");
   lcd.print(maxOpenPos);
   lcd.setCursor(0, 2);
-  lcd.print("POS:");
-  lcd.print(newPosition); // DUPE TBD TODO
-  lcd.setCursor(0, 3);
   lcd.print("CLOSE POS:"); lcd.print(closePos);
+  lcd.setCursor(0, 3);
+//  lcd.print("POS:");
+//  lcd.print(newPosition); // DUPE TBD TODO
 }
 
 //////////////////////////////////////////////////////
