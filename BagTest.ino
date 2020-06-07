@@ -73,7 +73,7 @@ void setup()
   lcd.print("Ambu Bag Fixture!");
 	// This delay is enough time to program if there are issues with the code/programming
   delay(3000);
-  Serial.begin(9600);
+  Serial.begin(115200);
   while(!Serial);    // time to get serial running
 
   //Init BME280 sensor
@@ -107,7 +107,7 @@ void loop()
   markLoopStart();
 
   float ch1Val = fs6122_readPressure_SmlpM();
-  float ch2Val = bme.readTemperature();
+  float ch2Val = bme.readPressure();
   float ch3Val = cpuLoad;
   newPosition = myEnc.read();
   openSwState = digitalRead(OPEN_SW);
