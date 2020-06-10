@@ -10,7 +10,7 @@
 #include <stdio.h>
 #include <Adafruit_Sensor.h>
 #include <Adafruit_BME280.h>
-#include <Streaming.h>  // cout <iosstream> functionality using Serial << endl;
+#include <Streaming.h>  // cout <iostream> functionality using Serial << endl;
 #include <avr/wdt.h>    // add the dog
 #include "fs6122.h"
 #include "wdog.h"
