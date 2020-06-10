@@ -16,9 +16,11 @@
 #include "wdog.h"
 
 // defines
-#define SPEED         150
+#define TIMESTAMP_DATA_OUTPUT
+
+#define SPEED         255
 #define OPEN_POS_ADD  100
-#define CLOSE_POS_ADD 400
+#define CLOSE_POS_ADD 450
 #define OPEN_DWELL    1250
 #define TGT_CYC_MS    2000
 #define TGT_HST       10
@@ -114,8 +116,11 @@ void loop()
   closeSwState = digitalRead(CLOSED_SW);
 
   // Communication with RaspberryPi
+#ifdef TIMESTAMP_DATA_OUTPUT
+  Serial3 << millis() << "," << ch1Val << "," << ch2Val << "," << ch3Val << endl;
+#else
   Serial3 << ch1Val << "," << ch2Val << "," << ch3Val << endl;
-  //Serial << millis() << "," << ch1Val << "," << ch2Val << "," << ch3Val << endl;
+#endif
 
   Sequence();
 
