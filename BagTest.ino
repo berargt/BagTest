@@ -111,13 +111,18 @@ void loop()
   float ch1Val = fs6122_readPressure_SmlpM();
   float ch2Val = bme.readPressure()/100;
   float ch3Val = cpuLoad;
+#ifdef TIMESTAMP_DATA_OUTPUT
+  float temperature;
+  temperature = bme.readTemperature();
+#endif
   newPosition = myEnc.read();
   openSwState = digitalRead(OPEN_SW);
   closeSwState = digitalRead(CLOSED_SW);
 
   // Communication with RaspberryPi
 #ifdef TIMESTAMP_DATA_OUTPUT
-  Serial3 << millis() << "," << ch1Val << "," << ch2Val << "," << ch3Val << endl;
+  Serial3 << millis() << "," << ch1Val << "," << ch2Val << "," << ch3Val
+                      << "," << newPosition << "," << temperature << endl;
 #else
   Serial3 << ch1Val << "," << ch2Val << "," << ch3Val << endl;
 #endif
