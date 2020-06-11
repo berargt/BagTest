@@ -19,8 +19,8 @@
 #define TIMESTAMP_DATA_OUTPUT
 
 #define SPEED         255
-#define OPEN_POS_ADD  100
-#define CLOSE_POS_ADD 450
+#define OPEN_POS_ADD  200
+#define CLOSE_POS_ADD 400
 #define OPEN_DWELL    1250
 #define TGT_CYC_MS    2000
 #define TGT_HST       10
@@ -122,7 +122,8 @@ void loop()
   // Communication with RaspberryPi
 #ifdef TIMESTAMP_DATA_OUTPUT
   Serial3 << millis() << "," << ch1Val << "," << ch2Val << "," << ch3Val
-                      << "," << newPosition << "," << temperature << endl;
+                      << "," << newPosition << "," << temperature << "," 
+                      << dir << "," << pwmSpeed << endl;
 #else
   Serial3 << ch1Val << "," << ch2Val << "," << ch3Val << endl;
 #endif
@@ -182,6 +183,10 @@ void Home(void) {
 
   maxOpenPos = myEnc.read() + OPEN_POS_ADD;
   closePos = maxOpenPos + CLOSE_POS_ADD;
+  Serial3 << "********************************************************" << endl;
+  Serial3 << "maxOpenPos: " << maxOpenPos << endl;
+  Serial3 << "closePos: " << closePos << endl;
+  Serial3 << "********************************************************" << endl;
 }
 
 /******************************************************************************/
