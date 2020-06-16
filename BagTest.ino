@@ -45,6 +45,7 @@ long newPosition;
 long maxOpenPos;
 long closePos;
 int pwmSpeed;
+int speed = 128;
 uint8_t openSwState;
 uint8_t closeSwState;
 long cycleCount;
@@ -93,7 +94,7 @@ void setup()
   Home();
   dir = CLOSE;
   lastTime = millis();
-  pwmSpeed = SPEED;
+  pwmSpeed = speed;
   cycleCount = 0;
 
   digitalWrite(DIR_PIN, dir);
@@ -106,36 +107,42 @@ void setup()
 /******************************************************************************/
 void loop()
 {
-  markLoopStart();
+  for(int i=128;i<256; i+=8) {
+    for (int j=0;j<5;j++) {
+      speed = i;
 
-  float ch1Val = fs6122_readPressure_SmlpM();
-  float ch2Val = bme.readPressure()/100;
-  float ch3Val = cpuLoad;
+      markLoopStart();
+
+      float ch1Val = fs6122_readPressure_SmlpM();
+      float ch2Val = bme.readPressure()/100;
+      float ch3Val = cpuLoad;
 #ifdef TIMESTAMP_DATA_OUTPUT
-  float temperature;
-  temperature = bme.readTemperature();
+      float temperature;
+      temperature = bme.readTemperature();
 #endif
-  newPosition = myEnc.read();
-  openSwState = digitalRead(OPEN_SW);
-  closeSwState = digitalRead(CLOSED_SW);
+      newPosition = myEnc.read();
+      openSwState = digitalRead(OPEN_SW);
+      closeSwState = digitalRead(CLOSED_SW);
 
-  // Communication with RaspberryPi
+      // Communication with RaspberryPi
 #ifdef TIMESTAMP_DATA_OUTPUT
-  Serial3 << millis() << "," << ch1Val << "," << ch2Val << "," << ch3Val
-                      << "," << newPosition << "," << temperature << "," 
-                      << dir << "," << pwmSpeed << endl;
+      Serial3 << millis() << "," << ch1Val << "," << ch2Val << "," << ch3Val
+        << "," << newPosition << "," << temperature << "," 
+        << dir << "," << pwmSpeed << endl;
 #else
-  Serial3 << ch1Val << "," << ch2Val << "," << ch3Val << endl;
+      Serial3 << ch1Val << "," << ch2Val << "," << ch3Val << endl;
 #endif
 
-  Sequence();
+      Sequence();
 
-  digitalWrite(DIR_PIN, dir);
-  analogWrite(PWM_PIN, pwmSpeed);
+      digitalWrite(DIR_PIN, dir);
+      analogWrite(PWM_PIN, pwmSpeed);
 
-  displayLCD();
-  wdog_reset();
-  markLoopEnd();
+      //  displayLCD();
+      wdog_reset();
+      markLoopEnd();
+    }
+  }
 }
 
 /******************************************************************************/
@@ -177,7 +184,7 @@ void Home(void) {
 
   // Start Closing to avoid switch closure detection
   digitalWrite(DIR_PIN, CLOSE);
-  analogWrite(PWM_PIN, SPEED);
+  analogWrite(PWM_PIN, speed);
 
   delay(100);
 
@@ -199,7 +206,7 @@ void Sequence(void) {
 	static unsigned long start_time = 0;
 
 	if (dir == CLOSE) {
-		pwmSpeed = SPEED;
+		pwmSpeed = speed;
 
 		if (newPosition > closePos) {
 			dir = OPEN;
@@ -213,7 +220,7 @@ void Sequence(void) {
 					state = DWELL; // advance to next state
 					start_time = millis();
 				}
-				pwmSpeed = SPEED;
+				pwmSpeed = speed;
 				break;
 
 			case DWELL:
@@ -231,7 +238,7 @@ void Sequence(void) {
 				cycleCount++;
 				cycleTime = millis()-lastTime;
 				state = OPENING;
-				pwmSpeed = SPEED;
+				pwmSpeed = speed;
 				lastTime = millis();
 
 				break;
