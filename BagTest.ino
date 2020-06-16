@@ -18,7 +18,7 @@
 // defines
 #define TIMESTAMP_DATA_OUTPUT
 
-#define SPEED         255
+#define SPEED         128
 #define OPEN_POS_ADD  200
 #define CLOSE_POS_ADD 400
 #define OPEN_DWELL    1250
@@ -45,7 +45,7 @@ long newPosition;
 long maxOpenPos;
 long closePos;
 int pwmSpeed;
-int speed = 128;
+int speed = SPEED;
 uint8_t openSwState;
 uint8_t closeSwState;
 long cycleCount;
@@ -55,6 +55,7 @@ long loopStartTime_us = 0;
 double cpuLoad = 0;
 long loopOverruns = 0;
 unsigned long loopCounter = 0;
+int count;
 
 // Classes
 Adafruit_BME280 bme; 
@@ -107,8 +108,9 @@ void setup()
 /******************************************************************************/
 void loop()
 {
-  for(int i=128;i<256; i+=8) {
-    for (int j=0;j<5;j++) {
+  int i=SPEED;
+  for(;i<256; i+=8) {
+    for (count=0;count<5;) {
       speed = i;
 
       markLoopStart();
@@ -128,7 +130,7 @@ void loop()
 #ifdef TIMESTAMP_DATA_OUTPUT
       Serial3 << millis() << "," << ch1Val << "," << ch2Val << "," << ch3Val
         << "," << newPosition << "," << temperature << "," 
-        << dir << "," << pwmSpeed << endl;
+        << dir << "," << pwmSpeed << "\r";
 #else
       Serial3 << ch1Val << "," << ch2Val << "," << ch3Val << endl;
 #endif
@@ -240,6 +242,7 @@ void Sequence(void) {
 				state = OPENING;
 				pwmSpeed = speed;
 				lastTime = millis();
+            count++;
 
 				break;
 		}
