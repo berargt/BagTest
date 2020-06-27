@@ -16,6 +16,8 @@
 #include "wdog.h"
 
 // defines
+
+// comment this for normal operation
 #define TIMESTAMP_DATA_OUTPUT
 
 #define SPEED         128
@@ -116,7 +118,7 @@ void loop()
       markLoopStart();
 
       pressure_flow_type fs6122;
-      fs6122_readSmlpM_Pressure(fs6122);
+      fs6122_readSmlpM_Pressure(&fs6122);
       float ch3Val = cpuLoad;
 #ifdef TIMESTAMP_DATA_OUTPUT
       float temperature;
@@ -128,11 +130,11 @@ void loop()
 
       // Communication with RaspberryPi
 #ifdef TIMESTAMP_DATA_OUTPUT
-      Serial3 << millis() << "," << fs6122.flow << "," << fs6122.pressure << "," << ch3Val
+      Serial3 << millis() << "," << fs6122.flow_rate << "," << fs6122.pressure << "," << ch3Val
                << "," << newPosition << "," << temperature << "," 
                << dir << "," << pwmSpeed << "\r";
 #else
-      Serial3 << fs6122.flow << "," << fs6122.pressure << "," << ch3Val << endl;
+      Serial3 << fs6122.flow_rate << "," << fs6122.pressure << "," << ch3Val << endl;
 #endif
 
       Sequence();

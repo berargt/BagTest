@@ -38,8 +38,8 @@ void fs6122_readSmlpM_Pressure(pressure_flow_type *pf){
 
    if (8 <= Wire.available()) { // if two bytes were received
       for(int byteIdx = 0; byteIdx < 4; byteIdx++){
-         pf->flow = pf->flow << 8;    // shift high byte to be high 8 bits
-         pf->flow |= Wire.read(); // receive low byte as lower 8 bits
+         pf->flow_rate = pf->flow_rate << 8;    // shift high byte to be high 8 bits
+         pf->flow_rate |= Wire.read(); // receive low byte as lower 8 bits
       }
       if (4 <= Wire.available()) {
          for(int byteIdx = 0; byteIdx < 4; byteIdx++){
@@ -48,9 +48,9 @@ void fs6122_readSmlpM_Pressure(pressure_flow_type *pf){
          }
       }
 
-   } else {else
+   } else {
       //ERROR - sensor did not return data. TODO - return something meaningful
-       pf->flow = -42;
+       pf->flow_rate = -42;
        pf->pressure = -42;
    }
 }
