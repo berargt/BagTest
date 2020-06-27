@@ -13,9 +13,19 @@
 #define FS6122_CMD_CAL_FLOW_RATE byte(0x1C)
 #define FS6122_CMD_CAL_PRESSURE byte(0x24)
 #define FS6122_CMD_READ_FLOW_RATE byte(0x83)
+#define FS6122_CMD_READ_FLOW_RATE_AND_PRESSURE byte(0x84)
+#define FS6122_CMD_READ_PRESSURE byte(0xA3)
+#define FS6122_CMD_READ_TEMPERATURE byte(0xB2)
+#define FS6122_CMD_READ_HUMIDITY byte(0xB3)
+
+typedef struct{
+   long pressure;
+   long flow_rate;
+} pressure_flow_type;
 
 void fs6122_init();
 void fs6122_zeroFlowCal();
-float fs6122_readPressure_SmlpM();
+void fs6122_readSmlpM_Pressure();
+float fs6122_readSmlpM();
 
 #endif // FS6122_H

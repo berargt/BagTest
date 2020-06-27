@@ -115,8 +115,8 @@ void loop()
 
       markLoopStart();
 
-      float ch1Val = fs6122_readPressure_SmlpM();
-      float ch2Val = bme.readPressure()/100;
+      pressure_flow_type fs6122;
+      fs6122_readSmlpM_Pressure(fs6122);
       float ch3Val = cpuLoad;
 #ifdef TIMESTAMP_DATA_OUTPUT
       float temperature;
@@ -128,11 +128,11 @@ void loop()
 
       // Communication with RaspberryPi
 #ifdef TIMESTAMP_DATA_OUTPUT
-      Serial3 << millis() << "," << ch1Val << "," << ch2Val << "," << ch3Val
-        << "," << newPosition << "," << temperature << "," 
-        << dir << "," << pwmSpeed << "\r";
+      Serial3 << millis() << "," << fs6122.flow << "," << fs6122.pressure << "," << ch3Val
+               << "," << newPosition << "," << temperature << "," 
+               << dir << "," << pwmSpeed << "\r";
 #else
-      Serial3 << ch1Val << "," << ch2Val << "," << ch3Val << endl;
+      Serial3 << fs6122.flow << "," << fs6122.pressure << "," << ch3Val << endl;
 #endif
 
       Sequence();
