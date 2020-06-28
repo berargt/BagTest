@@ -32,12 +32,10 @@ void fs6122_readSmlpM_Pressure(pressure_flow_type *pf){
    long reading = 0;
 
    Wire.beginTransmission(FS6122_ADDRESS);
-   Wire.write(FS6122_CMD_READ_FLOW_RATE);
+   Wire.write(FS6122_CMD_READ_FLOW_RATE_AND_PRESSURE);
    Wire.endTransmission();
 
    Wire.requestFrom(FS6122_ADDRESS, 9); 
-
-   Serial3 << "Available:" << Wire.available() << endl;
 
    if (8 <= Wire.available()) { // if two bytes were received
       for(int byteIdx = 0; byteIdx < 4; byteIdx++){
@@ -45,7 +43,6 @@ void fs6122_readSmlpM_Pressure(pressure_flow_type *pf){
          pf->flow_rate |= Wire.read(); // receive low byte as lower 8 bits
       }
 
-   Serial3 << "Available:" << Wire.available() << endl;
       if (4 <= Wire.available()) {
          for(int byteIdx = 0; byteIdx < 4; byteIdx++){
             pf->pressure = pf->pressure << 8;    // shift high byte to be high 8 bits

@@ -22,7 +22,7 @@
 
 #define SPEED         128
 #define OPEN_POS_ADD  200
-#define CLOSE_POS_ADD 400
+#define CLOSE_POS_ADD 600
 #define OPEN_DWELL    1250
 #define TGT_CYC_MS    2000
 #define TGT_HST       10
@@ -121,8 +121,6 @@ void loop()
 
       pressure_flow_type fs6122;
       fs6122_readSmlpM_Pressure(&fs6122);
-      Serial3 << "Flow: " << fs6122.flow_rate << " Pressure: " 
-              << fs6122.pressure << endl;
       float ch3Val = cpuLoad;
 #ifdef TIMESTAMP_DATA_OUTPUT
       float temperature;
