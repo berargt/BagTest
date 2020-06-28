@@ -132,7 +132,7 @@ void loop()
 #ifdef TIMESTAMP_DATA_OUTPUT
       Serial3 << millis() << "," << fs6122.flow_rate << "," << fs6122.pressure << "," << ch3Val
                << "," << newPosition << "," << temperature << "," 
-               << dir << "," << pwmSpeed << "\r";
+               << dir << "," << pwmSpeed << analogRead(A0) << "\r";
 #else
       Serial3 << fs6122.flow_rate << "," << fs6122.pressure << "," << ch3Val << endl;
 #endif
