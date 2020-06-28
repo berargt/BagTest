@@ -81,6 +81,7 @@ void setup()
   delay(3000);
   Serial3.begin(115200);
   while(!Serial3);    // time to get serial running
+  Serial3 << "Starting BagTest Fixture!" << endl;
 
   //Init BME280 sensor
   bme.begin(BME280_ADDRESS_ALTERNATE);
@@ -110,6 +111,7 @@ void setup()
 /******************************************************************************/
 void loop()
 {
+  Serial3 << "Start Loop" << endl;
   int i=SPEED;
   for(;i<256; i+=8) {
     for (count=0;count<5;) {
@@ -119,14 +121,14 @@ void loop()
 
       pressure_flow_type fs6122;
       fs6122_readSmlpM_Pressure(&fs6122);
+      Serial3 << "Flow: " << fs6122.flow_rate << " Pressure: " 
+              << fs6122.pressure << endl;
       float ch3Val = cpuLoad;
 #ifdef TIMESTAMP_DATA_OUTPUT
       float temperature;
       temperature = bme.readTemperature();
 #endif
       newPosition = myEnc.read();
-      openSwState = digitalRead(OPEN_SW);
-      closeSwState = digitalRead(CLOSED_SW);
 
       // Communication with RaspberryPi
 #ifdef TIMESTAMP_DATA_OUTPUT

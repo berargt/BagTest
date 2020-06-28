@@ -1,5 +1,6 @@
 #include "fs6122.h"
 #include <Wire.h>
+#include <Streaming.h>  // cout <iostream> functionality using Serial << endl;
 
 void fs6122_init(){
   Wire.begin();
@@ -34,13 +35,17 @@ void fs6122_readSmlpM_Pressure(pressure_flow_type *pf){
    Wire.write(FS6122_CMD_READ_FLOW_RATE);
    Wire.endTransmission();
 
-   Wire.requestFrom(FS6122_ADDRESS, 8); 
+   Wire.requestFrom(FS6122_ADDRESS, 9); 
+
+   Serial3 << "Available:" << Wire.available() << endl;
 
    if (8 <= Wire.available()) { // if two bytes were received
       for(int byteIdx = 0; byteIdx < 4; byteIdx++){
          pf->flow_rate = pf->flow_rate << 8;    // shift high byte to be high 8 bits
          pf->flow_rate |= Wire.read(); // receive low byte as lower 8 bits
       }
+
+   Serial3 << "Available:" << Wire.available() << endl;
       if (4 <= Wire.available()) {
          for(int byteIdx = 0; byteIdx < 4; byteIdx++){
             pf->pressure = pf->pressure << 8;    // shift high byte to be high 8 bits
