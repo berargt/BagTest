@@ -19,13 +19,13 @@
 #define FS6122_CMD_READ_HUMIDITY byte(0xB3)
 
 typedef struct{
-   long pressure;
-   long flow_rate;
+   long umH2O;
+   long mSLPM;
 } pressure_flow_type;
 
 void fs6122_init();
 void fs6122_zeroFlowCal();
-void fs6122_readSmlpM_Pressure(pressure_flow_type *pf);
+void fs6122_readSmlpM_umH2O(pressure_flow_type *pf);
 float fs6122_readSmlpM();
 
 #endif // FS6122_H

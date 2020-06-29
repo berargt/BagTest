@@ -22,7 +22,7 @@
 
 #define SPEED         128
 #define OPEN_POS_ADD  200
-#define CLOSE_POS_ADD 600
+#define CLOSE_POS_ADD 400
 #define OPEN_DWELL    1250
 #define TGT_CYC_MS    2000
 #define TGT_HST       10
@@ -43,7 +43,7 @@
 
 // Globals
 uint8_t dir;
-long newPosition;
+long position;
 long maxOpenPos;
 long closePos;
 int pwmSpeed;
@@ -120,19 +120,18 @@ void loop()
       markLoopStart();
 
       pressure_flow_type fs6122;
-      fs6122_readSmlpM_Pressure(&fs6122);
-      float ch3Val = cpuLoad;
+      fs6122_readSmlpM_umH2O(&fs6122);
 #ifdef TIMESTAMP_DATA_OUTPUT
       float temperature;
       temperature = bme.readTemperature();
 #endif
-      newPosition = myEnc.read();
+      position = myEnc.read();
 
       // Communication with RaspberryPi
 #ifdef TIMESTAMP_DATA_OUTPUT
-      Serial3 << millis() << "," << fs6122.flow_rate << "," << fs6122.pressure << "," << ch3Val
-               << "," << newPosition << "," << temperature << "," 
-               << dir << "," << pwmSpeed << analogRead(A0) << "\r";
+      Serial3 << millis() << "," << fs6122.mSLPM << "," << fs6122.umH2O << ","
+               << cpuLoad << "," << position << "," << temperature << "," 
+               << dir << "," << pwmSpeed << "," << analogRead(A0) << "\r";
 #else
       Serial3 << fs6122.flow_rate << "," << fs6122.pressure << "," << ch3Val << endl;
 #endif
@@ -175,7 +174,6 @@ void Home(void) {
   digitalWrite(DIR_PIN, OPEN);
   analogWrite(PWM_PIN, homeSpeed);
 
-
   do {
     openSwState = digitalRead(OPEN_SW);
     lcd.setCursor(0, 1); lcd.print("SW:");lcd.print(openSwState);
@@ -194,10 +192,10 @@ void Home(void) {
 
   maxOpenPos = myEnc.read() + OPEN_POS_ADD;
   closePos = maxOpenPos + CLOSE_POS_ADD;
-  Serial3 << "********************************************************" << endl;
-  Serial3 << "maxOpenPos: " << maxOpenPos << endl;
-  Serial3 << "closePos: " << closePos << endl;
-  Serial3 << "********************************************************" << endl;
+  Serial3 << "********************************************************" << "\r";
+  Serial3 << "maxOpenPos: " << maxOpenPos << "\r";
+  Serial3 << "closePos: " << closePos << "\r";
+  Serial3 << "********************************************************" << "\r";
 }
 
 /******************************************************************************/
@@ -212,7 +210,7 @@ void Sequence(void) {
 	if (dir == CLOSE) {
 		pwmSpeed = speed;
 
-		if (newPosition > closePos) {
+		if (position > closePos) {
 			dir = OPEN;
 		}
 	} 
@@ -220,7 +218,7 @@ void Sequence(void) {
 		switch (state)
 		{
 			case OPENING:
-				if (newPosition < maxOpenPos) {
+				if (position < maxOpenPos) {
 					state = DWELL; // advance to next state
 					start_time = millis();
 				}
@@ -260,7 +258,7 @@ void displayLCD(void) {
   lcd.clear(); //display status of motor on LCD
   lcd.setCursor(0, 0);
   lcd.print("CURPOS:");
-  lcd.print(newPosition);
+  lcd.print(position);
   lcd.setCursor(0, 1);
   lcd.print("OPEN POS:");
   lcd.print(maxOpenPos);
@@ -268,7 +266,7 @@ void displayLCD(void) {
   lcd.print("CLOSE POS:"); lcd.print(closePos);
   lcd.setCursor(0, 3);
 //  lcd.print("POS:");
-//  lcd.print(newPosition); // DUPE TBD TODO
+//  lcd.print(position); // DUPE TBD TODO
 }
 
 //////////////////////////////////////////////////////
