@@ -35,7 +35,7 @@
 #define CLOSE         HIGH
 #define OPEN          LOW
 
-#define MAIN_LOOP_TS_MS 50
+#define MAIN_LOOP_TS_MS 0
 
 #define  OPENING 0
 #define  DWELL   1
