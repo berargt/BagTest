@@ -20,34 +20,42 @@
 // comment this for normal operation
 #define TIMESTAMP_DATA_OUTPUT
 
-#define SPEED         128
-#define OPEN_POS_ADD  200
+#define START_PWM         100
+#define DWELLMS           100
+#define PER_STEP_MS       10
+#define OFF_MS            2200
+#define RAMP_UP_PWM_INC   2
+#define RAMP_DOWN_PWN_INC 4
+
+#define OPEN_POS_ADD  250
 #define CLOSE_POS_ADD 600
-#define OPEN_DWELL    1250
-#define TGT_CYC_MS    2000
-#define TGT_HST       10
 
 #define OPEN_SW       9
 #define CLOSED_SW     8
 #define PAUSE_SW      4
 #define PWM_PIN       3
 #define DIR_PIN       2
+
 #define CLOSE         HIGH
 #define OPEN          LOW
 
 #define MAIN_LOOP_TS_MS 0
 
-#define  OPENING 0
-#define  DWELL   1
-#define  TRANS   2
+enum sequence {
+   INIT_RAMP_UP_SEQ,
+   RAMP_UP_SEQ,
+   DWELL_SEQ,
+   INIT_RAMP_DOWN_SEQ,
+   RAMP_DOWN_SEQ,
+   OFF_TIME_SEQ
+};
 
 // Globals
 uint8_t dir;
 long position;
 long maxOpenPos;
 long closePos;
-int pwmSpeed;
-int speed = SPEED;
+int pwmSpeed = START_PWM;
 uint8_t openSwState;
 uint8_t closeSwState;
 long cycleCount;
@@ -77,7 +85,7 @@ void setup()
   lcd.setCursor(0, 1);
   pinMode(PAUSE_SW, INPUT_PULLUP);
   lcd.print("Ambu Bag Fixture!");
-	// This delay is enough time to program if there are issues with the code/programming
+  // This delay is enough time to program if there are issues with the code/programming
   delay(3000);
   Serial3.begin(115200);
   while(!Serial3);    // time to get serial running
@@ -98,7 +106,6 @@ void setup()
   Home();
   dir = CLOSE;
   lastTime = millis();
-  pwmSpeed = speed;
   cycleCount = 0;
 
   digitalWrite(DIR_PIN, dir);
@@ -111,41 +118,34 @@ void setup()
 /******************************************************************************/
 void loop()
 {
-  Serial3 << "Start Loop" << endl;
-  int i=SPEED;
-  for(;i<256; i+=8) {
-    for (count=0;count<5;) {
-      speed = i;
 
-      markLoopStart();
+   markLoopStart();
 
-      pressure_flow_type fs6122;
-      fs6122_readSmlpM_umH2O(&fs6122);
+   pressure_flow_type fs6122;
+   fs6122_readSmlpM_umH2O(&fs6122);
 #ifdef TIMESTAMP_DATA_OUTPUT
-      float temperature;
-      temperature = bme.readTemperature();
+   float temperature;
+   temperature = bme.readTemperature();
 #endif
-      position = myEnc.read();
+   position = myEnc.read();
 
-      // Communication with RaspberryPi
+   // Communication with RaspberryPi
 #ifdef TIMESTAMP_DATA_OUTPUT
-      Serial3 << millis() << "," << fs6122.mSLPM << "," << fs6122.umH2O << ","
-               << cpuLoad << "," << position << "," << temperature << "," 
-               << dir << "," << pwmSpeed << "," << analogRead(A0) << "\r";
+   Serial3 << millis() << "," << fs6122.mSLPM << "," << fs6122.umH2O << ","
+      << cpuLoad << "," << position << "," << temperature << "," 
+      << dir << "," << pwmSpeed << "," << analogRead(A0) << "\r";
 #else
-      Serial3 << fs6122.flow_rate << "," << fs6122.pressure << "," << ch3Val << endl;
+   Serial3 << fs6122.flow_rate << "," << fs6122.pressure << "," << cpuLoad << endl;
 #endif
 
-      Sequence();
+   Sequence();
 
-      digitalWrite(DIR_PIN, dir);
-      analogWrite(PWM_PIN, pwmSpeed);
+   digitalWrite(DIR_PIN, dir);
+   analogWrite(PWM_PIN, pwmSpeed);
 
-      //  displayLCD();
-      wdog_reset();
-      markLoopEnd();
-    }
-  }
+   //  displayLCD();
+   wdog_reset();
+   markLoopEnd();
 }
 
 /******************************************************************************/
@@ -171,7 +171,7 @@ void Home(void) {
   }
 
   dir = OPEN;
-  digitalWrite(DIR_PIN, OPEN);
+  digitalWrite(DIR_PIN, dir);
   analogWrite(PWM_PIN, homeSpeed);
 
   do {
@@ -186,7 +186,7 @@ void Home(void) {
 
   // Start Closing to avoid switch closure detection
   digitalWrite(DIR_PIN, CLOSE);
-  analogWrite(PWM_PIN, speed);
+  analogWrite(PWM_PIN, pwmSpeed);
 
   delay(100);
 
@@ -204,49 +204,62 @@ void Home(void) {
 /******************************************************************************/
 void Sequence(void) {
 
-	static char state = OPENING;
-	static unsigned long start_time = 0;
+  static char state = INIT_RAMP_UP_SEQ;
+  static unsigned long next_inc_ms = 0;
 
-	if (dir == CLOSE) {
-		pwmSpeed = speed;
+  switch (state) {
 
-		if (position > closePos) {
-			dir = OPEN;
-		}
-	} 
-	else { // dir == OPEN or something else
-		switch (state)
-		{
-			case OPENING:
-				if (position < maxOpenPos) {
-					state = DWELL; // advance to next state
-					start_time = millis();
-				}
-				pwmSpeed = speed;
-				break;
+    case INIT_RAMP_UP_SEQ:
+      pwmSpeed = START_PWM;
+      state = RAMP_UP_SEQ;
+      next_inc_ms = millis() + PER_STEP_MS;
+      dir = CLOSE;
+      break;
 
-			case DWELL:
-				if ((millis() - start_time)  > OPEN_DWELL) {
-					state = TRANS; // advance to next state
-				}
-				else {
-					// stop motor
-					pwmSpeed = 0;
-				}
-				break;
+    case RAMP_UP_SEQ:
+      if (millis() > next_inc_ms)  {
+        if (pwmSpeed >= 200) {
+          next_inc_ms = millis() + DWELLMS;
+          state = DWELL_SEQ;
+        } 
+        else {
+          pwmSpeed += RAMP_UP_PWM_INC;
+        }
+        next_inc_ms = millis() + PER_STEP_MS;
+      }
+      dir = CLOSE;
+      break;
 
-			case TRANS:
-				dir = CLOSE;
-				cycleCount++;
-				cycleTime = millis()-lastTime;
-				state = OPENING;
-				pwmSpeed = speed;
-				lastTime = millis();
-            count++;
+    case DWELL_SEQ:
+      if (millis() > next_inc_ms) state = INIT_RAMP_DOWN_SEQ;
+      break;
 
-				break;
-		}
-	}
+    case INIT_RAMP_DOWN_SEQ:
+      state = RAMP_DOWN_SEQ;
+      next_inc_ms = millis() + PER_STEP_MS;
+      pwmSpeed -= RAMP_DOWN_PWN_INC;
+      dir = OPEN;
+      break;
+
+    case RAMP_DOWN_SEQ:
+      if (millis() > next_inc_ms)  {
+        if (pwmSpeed <= 100) {
+          next_inc_ms = millis() + OFF_MS;
+          pwmSpeed = 0;
+          state = OFF_TIME_SEQ;
+        } 
+        else {
+          pwmSpeed -= RAMP_DOWN_PWN_INC;
+          next_inc_ms = millis() + PER_STEP_MS;
+        }
+      }
+      dir = OPEN;
+      break;
+
+    case OFF_TIME_SEQ:
+      if (millis() >= next_inc_ms) state = INIT_RAMP_UP_SEQ;
+      break;
+  }
 }
 
 /******************************************************************************/
