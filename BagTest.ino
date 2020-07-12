@@ -42,12 +42,12 @@
 #define MAIN_LOOP_TS_MS 0
 
 enum sequence {
-   INIT_RAMP_UP_SEQ,
-   RAMP_UP_SEQ,
-   DWELL_SEQ,
-   INIT_RAMP_DOWN_SEQ,
-   RAMP_DOWN_SEQ,
-   OFF_TIME_SEQ
+  INIT_RAMP_UP_SEQ,
+  RAMP_UP_SEQ,
+  DWELL_SEQ,
+  INIT_RAMP_DOWN_SEQ,
+  RAMP_DOWN_SEQ,
+  OFF_TIME_SEQ
 };
 
 // Globals
@@ -119,33 +119,33 @@ void setup()
 void loop()
 {
 
-   markLoopStart();
+  markLoopStart();
 
-   pressure_flow_type fs6122;
-   fs6122_readSmlpM_umH2O(&fs6122);
+  pressure_flow_type fs6122;
+  fs6122_readSmlpM_umH2O(&fs6122);
 #ifdef TIMESTAMP_DATA_OUTPUT
-   float temperature;
-   temperature = bme.readTemperature();
+  float temperature;
+  temperature = bme.readTemperature();
 #endif
-   position = myEnc.read();
+  position = myEnc.read();
 
-   // Communication with RaspberryPi
+  // Communication with RaspberryPi
 #ifdef TIMESTAMP_DATA_OUTPUT
-   Serial3 << millis() << "," << fs6122.mSLPM << "," << fs6122.umH2O << ","
-      << cpuLoad << "," << position << "," << temperature << "," 
-      << dir << "," << pwmSpeed << "," << analogRead(A0) << "\r";
+  Serial3 << millis() << "," << fs6122.mSLPM << "," << fs6122.umH2O << ","
+    << cpuLoad << "," << position << "," << temperature << "," 
+    << dir << "," << pwmSpeed << "," << analogRead(A0) << "\r";
 #else
-   Serial3 << fs6122.flow_rate << "," << fs6122.pressure << "," << cpuLoad << endl;
+  Serial3 << fs6122.flow_rate << "," << fs6122.pressure << "," << cpuLoad << endl;
 #endif
 
-   Sequence();
+  Sequence();
 
-   digitalWrite(DIR_PIN, dir);
-   analogWrite(PWM_PIN, pwmSpeed);
+  digitalWrite(DIR_PIN, dir);
+  analogWrite(PWM_PIN, pwmSpeed);
 
-   //  displayLCD();
-   wdog_reset();
-   markLoopEnd();
+  //  displayLCD();
+  wdog_reset();
+  markLoopEnd();
 }
 
 /******************************************************************************/
@@ -224,8 +224,8 @@ void Sequence(void) {
         } 
         else {
           pwmSpeed += RAMP_UP_PWM_INC;
+          next_inc_ms = millis() + PER_STEP_MS;
         }
-        next_inc_ms = millis() + PER_STEP_MS;
       }
       dir = CLOSE;
       break;
@@ -278,8 +278,8 @@ void displayLCD(void) {
   lcd.setCursor(0, 2);
   lcd.print("CLOSE POS:"); lcd.print(closePos);
   lcd.setCursor(0, 3);
-//  lcd.print("POS:");
-//  lcd.print(position); // DUPE TBD TODO
+  //  lcd.print("POS:");
+  //  lcd.print(position); // DUPE TBD TODO
 }
 
 //////////////////////////////////////////////////////
