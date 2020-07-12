@@ -1,0 +1,18 @@
+# plotBagTest.py 
+Plots the output csv file.
+usage: python plotBagTest.py datafile.csv -t "title_text"
+
+positional arguments:
+  filename    Filename of .csv data file
+
+optional arguments:
+  -h, --help  show this help message and exit
+  -t T        Graph title text. Uses filename if none.
+
+## EXAMPLES:
+>> python plotBagTest.py ../out.csv
+
+>> python plotBagTest.py ../out.csv -t "Some Title" &
+
+>> python plotBagTest.py --help
+
