@@ -20,7 +20,7 @@
 // comment this for normal operation
 #define TIMESTAMP_DATA_OUTPUT
 
-#define PWM_SPEED         100
+#define START_PWM_SPEED   50
 #define OPEN_DWELLMS      2500
 #define CLOSE_DWELLMS     500
 #define OPEN_SPEED        150
@@ -46,7 +46,8 @@ enum sequence {
   CLOSE_SEQ,
   CLOSE_DWELL_SEQ,
   OPEN_SEQ,
-  OPEN_DWELL_SEQ
+  OPEN_DWELL_SEQ,
+  STOP_SEQ
 };
 
 // Globals
@@ -54,7 +55,8 @@ uint8_t dir;
 long position;
 long maxOpenPos;
 long closePos;
-int pwmSpeed = PWM_SPEED;
+int pwmSpeed = START_PWM_SPEED;
+int desiredPwmSpeed = START_PWM_SPEED;
 uint8_t openSwState;
 uint8_t closeSwState;
 long cycleCount;
@@ -204,48 +206,69 @@ void Home(void) {
 void Sequence(void) {
 
   static char state = INIT_CLOSE_SEQ;
-  static unsigned long next_inc_ms = 0;
+  static unsigned long nextms = 0;
 
   switch (state) {
 
     case INIT_CLOSE_SEQ:
       dir = CLOSE;
-      pwmSpeed = PWM_SPEED;
+      pwmSpeed = desiredPwmSpeed;
       state = CLOSE_SEQ;
       break;
 
     case CLOSE_SEQ:
       if (position >= closePos) {
-         next_inc_ms = millis() + CLOSE_DWELLMS;
-         state = CLOSE_DWELL_SEQ;
-         pwmSpeed = 0;
+        nextms = millis() + CLOSE_DWELLMS;
+        state = CLOSE_DWELL_SEQ;
+        pwmSpeed = 0;
       }
       dir = CLOSE;
       break;
 
     case CLOSE_DWELL_SEQ:
-      if (millis() > next_inc_ms) {
-         state = OPEN_SEQ;
+      if (millis() > nextms) {
+        state = OPEN_SEQ;
       }
       break;
 
     case OPEN_SEQ:
       if (position <= maxOpenPos) { 
-         pwmSpeed = 0;
-         next_inc_ms = millis() + OPEN_DWELLMS;
-         state = OPEN_DWELL_SEQ;
+        pwmSpeed = 0;
+        nextms = millis() + OPEN_DWELLMS;
+        state = OPEN_DWELL_SEQ;
       }
       else {
-         dir = OPEN;
-         pwmSpeed = OPEN_SPEED;
+        dir = OPEN;
+        pwmSpeed = OPEN_SPEED;
       }
 
       break;
 
     case OPEN_DWELL_SEQ:
-      if (millis() > next_inc_ms)  {
-          state = INIT_CLOSE_SEQ;
-      } 
+      if (millis() > nextms)  {
+
+        state = INIT_CLOSE_SEQ;
+
+        // This creates the matrix of conditions
+        if (desiredPwmSpeed < 150) {
+          desiredPwmSpeed += 10;
+        }
+        else {
+          desiredPwmSpeed = START_PWM_SPEED;
+          if (closePos < 800) {
+            closePos += 100;
+          }
+          else {
+            state = STOP_SEQ;
+          }
+        } 
+      }
+      break;
+
+    case STOP_SEQ:
+    default:
+      // do nothing
+      pwmSpeed = 0;
       break;
   }
 }
