@@ -20,7 +20,7 @@
 // comment this for normal operation
 #define TIMESTAMP_DATA_OUTPUT
 
-#define START_PWM_SPEED   50
+#define START_PWM_SPEED   100
 #define OPEN_DWELLMS      2500
 #define CLOSE_DWELLMS     500
 #define OPEN_SPEED        150
@@ -28,6 +28,7 @@
 // position definitions
 #define OPEN_POS_ADD  250
 #define CLOSE_POS_ADD 400
+#define MAX_POS       700
 
 // pin definitions
 #define OPEN_SW       9
@@ -255,7 +256,7 @@ void Sequence(void) {
         }
         else {
           desiredPwmSpeed = START_PWM_SPEED;
-          if (closePos < 800) {
+          if (closePos < MAX_POS) {
             closePos += 100;
           }
           else {
