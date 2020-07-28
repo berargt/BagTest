@@ -20,16 +20,16 @@
 // comment this for normal operation
 #define TIMESTAMP_DATA_OUTPUT
 
-#define START_PWM         100
-#define DWELLMS           100
-#define PER_STEP_MS       10
-#define OFF_MS            2200
-#define RAMP_UP_PWM_INC   2
-#define RAMP_DOWN_PWN_INC 4
+#define PWM_SPEED         100
+#define OPEN_DWELLMS      2500
+#define CLOSE_DWELLMS     500
+#define OPEN_SPEED        150
 
+// position definitions
 #define OPEN_POS_ADD  250
-#define CLOSE_POS_ADD 600
+#define CLOSE_POS_ADD 400
 
+// pin definitions
 #define OPEN_SW       9
 #define CLOSED_SW     8
 #define PAUSE_SW      4
@@ -42,12 +42,11 @@
 #define MAIN_LOOP_TS_MS 0
 
 enum sequence {
-  INIT_RAMP_UP_SEQ,
-  RAMP_UP_SEQ,
-  DWELL_SEQ,
-  INIT_RAMP_DOWN_SEQ,
-  RAMP_DOWN_SEQ,
-  OFF_TIME_SEQ
+  INIT_CLOSE_SEQ,
+  CLOSE_SEQ,
+  CLOSE_DWELL_SEQ,
+  OPEN_SEQ,
+  OPEN_DWELL_SEQ
 };
 
 // Globals
@@ -55,7 +54,7 @@ uint8_t dir;
 long position;
 long maxOpenPos;
 long closePos;
-int pwmSpeed = START_PWM;
+int pwmSpeed = PWM_SPEED;
 uint8_t openSwState;
 uint8_t closeSwState;
 long cycleCount;
@@ -204,60 +203,49 @@ void Home(void) {
 /******************************************************************************/
 void Sequence(void) {
 
-  static char state = INIT_RAMP_UP_SEQ;
+  static char state = INIT_CLOSE_SEQ;
   static unsigned long next_inc_ms = 0;
 
   switch (state) {
 
-    case INIT_RAMP_UP_SEQ:
-      pwmSpeed = START_PWM;
-      state = RAMP_UP_SEQ;
-      next_inc_ms = millis() + PER_STEP_MS;
+    case INIT_CLOSE_SEQ:
       dir = CLOSE;
+      pwmSpeed = PWM_SPEED;
+      state = CLOSE_SEQ;
       break;
 
-    case RAMP_UP_SEQ:
-      if (millis() > next_inc_ms)  {
-        if (pwmSpeed >= 200) {
-          next_inc_ms = millis() + DWELLMS;
-          state = DWELL_SEQ;
-        } 
-        else {
-          pwmSpeed += RAMP_UP_PWM_INC;
-          next_inc_ms = millis() + PER_STEP_MS;
-        }
+    case CLOSE_SEQ:
+      if (position >= closePos) {
+         next_inc_ms = millis() + CLOSE_DWELLMS;
+         state = CLOSE_DWELL_SEQ;
+         pwmSpeed = 0;
       }
       dir = CLOSE;
       break;
 
-    case DWELL_SEQ:
-      if (millis() > next_inc_ms) state = INIT_RAMP_DOWN_SEQ;
-      break;
-
-    case INIT_RAMP_DOWN_SEQ:
-      state = RAMP_DOWN_SEQ;
-      next_inc_ms = millis() + PER_STEP_MS;
-      pwmSpeed -= RAMP_DOWN_PWN_INC;
-      dir = OPEN;
-      break;
-
-    case RAMP_DOWN_SEQ:
-      if (millis() > next_inc_ms)  {
-        if (pwmSpeed <= 100) {
-          next_inc_ms = millis() + OFF_MS;
-          pwmSpeed = 0;
-          state = OFF_TIME_SEQ;
-        } 
-        else {
-          pwmSpeed -= RAMP_DOWN_PWN_INC;
-          next_inc_ms = millis() + PER_STEP_MS;
-        }
+    case CLOSE_DWELL_SEQ:
+      if (millis() > next_inc_ms) {
+         state = OPEN_SEQ;
       }
-      dir = OPEN;
       break;
 
-    case OFF_TIME_SEQ:
-      if (millis() >= next_inc_ms) state = INIT_RAMP_UP_SEQ;
+    case OPEN_SEQ:
+      if (position <= maxOpenPos) { 
+         pwmSpeed = 0;
+         next_inc_ms = millis() + OPEN_DWELLMS;
+         state = OPEN_DWELL_SEQ;
+      }
+      else {
+         dir = OPEN;
+         pwmSpeed = OPEN_SPEED;
+      }
+
+      break;
+
+    case OPEN_DWELL_SEQ:
+      if (millis() > next_inc_ms)  {
+          state = INIT_CLOSE_SEQ;
+      } 
       break;
   }
 }
