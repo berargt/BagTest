@@ -13,12 +13,21 @@ cu -l /dev/ttyACM0 -s 115200
 
  ~/arduino-1.8.12/arduino --upload BagTest.ino
 
-Now:
 
+#To compile
+make verify
+
+#To compile and upload
+make verify
+
+#To compile and upload
 make upload
 
-Collecting Data:
+#Start data collection
+make test 
 
-cat /dev/ttyUSB0  | tee DATA/NewMotorData.csv 
+In another terminal 
+
+tail -f out.csv
 
 
