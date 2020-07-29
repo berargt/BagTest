@@ -1,6 +1,10 @@
 # BagTest
 
-This is written and tested on the Arduino Mega.
+Ventilators In Peoria (VIP)
+
+Test the VIP fixture
+
+This is written and tested on the Arduino Mega 2560
 
 Serial Port Info:
 
