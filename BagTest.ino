@@ -20,7 +20,7 @@
 // comment this for normal operation
 #define TIMESTAMP_DATA_OUTPUT
 
-#define START_PWM_SPEED   100
+#define START_PWM_SPEED   50
 #define OPEN_DWELLMS      2500
 #define CLOSE_DWELLMS     500
 #define OPEN_SPEED        150
