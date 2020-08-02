@@ -23,7 +23,7 @@
 #define START_PWM_SPEED   150
 #define CLOSE_DWELLMS     1000
 #define OPEN_SPEED        150
-#define REQ_VOLUME        450
+#define REQ_VOLUME        500
 
 // position definitions
 #define OPEN_POS_ADD  250
