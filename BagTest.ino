@@ -9,7 +9,7 @@
 #include <Encoder.h>
 #include <stdio.h>
 #include <Adafruit_Sensor.h>
-#include <Adafruit_BME280.h>
+//#include <Adafruit_BME280.h>
 #include <Streaming.h>  // cout <iostream> functionality using Serial << endl;
 #include <avr/wdt.h>    // add the dog
 #include "fs6122.h"
@@ -24,7 +24,7 @@
 #define OPEN_DWELLMS      2500
 #define CLOSE_DWELLMS     1000
 #define OPEN_SPEED        150
-#define REQ_VOLUME        450
+#define REQ_VOLUME        400
 
 // position definitions
 #define OPEN_POS_ADD  250
@@ -72,7 +72,7 @@ float accumVolml;
   pressure_flow_type fs6122;
 
 // Classes
-Adafruit_BME280 bme; 
+//Adafruit_BME280 bme; 
 Encoder myEnc(18, 19);  // use interrupt pins
 LiquidCrystal_I2C lcd(0x27, 20, 4); // LCD address 0x27 20 chars 4 line display
 
@@ -96,7 +96,7 @@ void setup()
   Serial3 << "Starting BagTest Fixture!" << endl;
 
   //Init BME280 sensor
-  bme.begin(BME280_ADDRESS_ALTERNATE);
+//  bme.begin(BME280_ADDRESS_ALTERNATE);
 
   //Init Flowmeter
   fs6122_init();
