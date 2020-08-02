@@ -20,11 +20,11 @@
 // comment this for normal operation
 #define TIMESTAMP_DATA_OUTPUT
 
-#define START_PWM_SPEED   100
+#define START_PWM_SPEED   150
 #define OPEN_DWELLMS      2500
 #define CLOSE_DWELLMS     1000
 #define OPEN_SPEED        150
-#define REQ_VOLUME        400
+#define REQ_VOLUME        450
 
 // position definitions
 #define OPEN_POS_ADD  250
