@@ -21,7 +21,6 @@
 #define TIMESTAMP_DATA_OUTPUT
 
 #define START_PWM_SPEED   150
-#define OPEN_DWELLMS      2500
 #define CLOSE_DWELLMS     1000
 #define OPEN_SPEED        150
 #define REQ_VOLUME        450
@@ -61,7 +60,7 @@ int desiredPwmSpeed = START_PWM_SPEED;
 uint8_t openSwState;
 uint8_t closeSwState;
 long cycleCount;
-unsigned long lastTime;
+unsigned long lastms;
 unsigned long cycleTime;
 long loopStartTime_us = 0;
 double cpuLoad = 0;
@@ -216,8 +215,8 @@ void Sequence(void) {
       dir = CLOSE;
       pwmSpeed = desiredPwmSpeed;
       // get current time
-      lastTime = millis();
-      seqStartms = lastTime;
+      lastms = millis();
+      seqStartms = lastms;
       accumVolml = 0;
       state = CLOSE_SEQ;
       break;
@@ -311,10 +310,10 @@ void markLoopEnd(){
 
 float accumVolume(void) {
   float currentMS = millis();
-  float timeSliceMS = (currentMS - lastTime);
+  float timeSliceMS = (currentMS - lastms);
   float volumeml = ((float)fs6122.mSLPM/60000.0)*timeSliceMS; 
 
-  lastTime = currentMS;
+  lastms = currentMS;
 
 //  Serial3 << "\r*****" << timeSliceMS << " " << volumeml << "*****\r";
   accumVolml += volumeml;
