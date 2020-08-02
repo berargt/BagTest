@@ -20,10 +20,11 @@
 // comment this for normal operation
 #define TIMESTAMP_DATA_OUTPUT
 
-#define START_PWM_SPEED   50
+#define START_PWM_SPEED   100
 #define OPEN_DWELLMS      2500
-#define CLOSE_DWELLMS     500
+#define CLOSE_DWELLMS     1000
 #define OPEN_SPEED        150
+#define REQ_VOLUME        450
 
 // position definitions
 #define OPEN_POS_ADD  250
@@ -47,8 +48,7 @@ enum sequence {
   CLOSE_SEQ,
   CLOSE_DWELL_SEQ,
   OPEN_SEQ,
-  OPEN_DWELL_SEQ,
-  STOP_SEQ
+  OPEN_DWELL_SEQ
 };
 
 // Globals
@@ -68,6 +68,8 @@ double cpuLoad = 0;
 long loopOverruns = 0;
 unsigned long loopCounter = 0;
 int count;
+float accumVolml; 
+  pressure_flow_type fs6122;
 
 // Classes
 Adafruit_BME280 bme; 
@@ -107,7 +109,6 @@ void setup()
 
   Home();
   dir = CLOSE;
-  lastTime = millis();
   cycleCount = 0;
 
   digitalWrite(DIR_PIN, dir);
@@ -123,19 +124,18 @@ void loop()
 
   markLoopStart();
 
-  pressure_flow_type fs6122;
   fs6122_readSmlpM_umH2O(&fs6122);
 #ifdef TIMESTAMP_DATA_OUTPUT
-  float temperature;
-  temperature = bme.readTemperature();
+//  float temperature;
+//  temperature = bme.readTemperature();
 #endif
   position = myEnc.read();
 
   // Communication with RaspberryPi
 #ifdef TIMESTAMP_DATA_OUTPUT
   Serial3 << millis() << "," << fs6122.mSLPM << "," << fs6122.umH2O << ","
-    << cpuLoad << "," << position << "," << temperature << "," 
-    << dir << "," << pwmSpeed << "," << analogRead(A0) << "\r";
+                      << position << "," << dir << "," << pwmSpeed << "," 
+                      << analogRead(A0) << "," << accumVolml << "\r";
 #else
   Serial3 << fs6122.flow_rate << "," << fs6122.pressure << "," << cpuLoad << endl;
 #endif
@@ -208,17 +208,22 @@ void Sequence(void) {
 
   static char state = INIT_CLOSE_SEQ;
   static unsigned long nextms = 0;
+  static unsigned long seqStartms;
 
   switch (state) {
 
     case INIT_CLOSE_SEQ:
       dir = CLOSE;
       pwmSpeed = desiredPwmSpeed;
+      // get current time
+      lastTime = millis();
+      seqStartms = lastTime;
+      accumVolml = 0;
       state = CLOSE_SEQ;
       break;
 
     case CLOSE_SEQ:
-      if (position >= closePos) {
+      if (abs(accumVolume())>= (float)REQ_VOLUME) {
         nextms = millis() + CLOSE_DWELLMS;
         state = CLOSE_DWELL_SEQ;
         pwmSpeed = 0;
@@ -227,15 +232,18 @@ void Sequence(void) {
       break;
 
     case CLOSE_DWELL_SEQ:
+      accumVolume();
       if (millis() > nextms) {
+
         state = OPEN_SEQ;
       }
       break;
 
     case OPEN_SEQ:
+      accumVolume();
       if (position <= maxOpenPos) { 
         pwmSpeed = 0;
-        nextms = millis() + OPEN_DWELLMS;
+        nextms = millis() + 2*(millis() - seqStartms);
         state = OPEN_DWELL_SEQ;
       }
       else {
@@ -246,30 +254,14 @@ void Sequence(void) {
       break;
 
     case OPEN_DWELL_SEQ:
+      accumVolume();
       if (millis() > nextms)  {
-
         state = INIT_CLOSE_SEQ;
-
-        // This creates the matrix of conditions
-        if (desiredPwmSpeed < 150) {
-          desiredPwmSpeed += 10;
-        }
-        else {
-          desiredPwmSpeed = START_PWM_SPEED;
-          if (closePos < MAX_POS) {
-            closePos += 100;
-          }
-          else {
-            state = STOP_SEQ;
-          }
-        } 
       }
       break;
 
-    case STOP_SEQ:
     default:
-      // do nothing
-      pwmSpeed = 0;
+      state=INIT_CLOSE_SEQ;
       break;
   }
 }
@@ -291,7 +283,7 @@ void displayLCD(void) {
   lcd.print("CLOSE POS:"); lcd.print(closePos);
   lcd.setCursor(0, 3);
   //  lcd.print("POS:");
-  //  lcd.print(position); // DUPE TBD TODO
+  //  lcd.print(position); // DUPE TBD TODO;
 }
 
 //////////////////////////////////////////////////////
@@ -315,4 +307,17 @@ void markLoopEnd(){
     loopOverruns++;
     cpuLoad = 100.0;
   }
+}
+
+float accumVolume(void) {
+  float currentMS = millis();
+  float timeSliceMS = (currentMS - lastTime);
+  float volumeml = ((float)fs6122.mSLPM/60000.0)*timeSliceMS; 
+
+  lastTime = currentMS;
+
+//  Serial3 << "\r*****" << timeSliceMS << " " << volumeml << "*****\r";
+  accumVolml += volumeml;
+
+  return accumVolml;
 }
