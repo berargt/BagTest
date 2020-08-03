@@ -1,0 +1,1000 @@
+ 1024  git checkout 8a45a45507fa79e53ac6491853636ef4a25e2706
+ 1025  git rebase -i HEAD~2
+ 1026  git checkout master
+ 1027  git status
+ 1028  git rebase -i HEAD~2
+ 1029  git log --pretty=oneline --abbrev-commit
+ 1030  d9f1cf5 Changed again
+ 1031  105fd3d Changed content
+ 1032  df33c8a First commit
+ 1033  git log --pretty=oneline --abbrev-commit
+ 1034  git push origin +master
+ 1035  git status
+ 1036  gitk --all &
+ 1037  git status
+ 1038  gvim out.dat 
+ 1039  git status
+ 1040  git diff
+ 1041  git status
+ 1042  git add .
+ 1043  git commit
+ 1044  git reset --HARD
+ 1045  git reset HARD
+ 1046  git reset HEAD
+ 1047  git status
+ 1048  git reset
+ 1049  git status
+ 1050  git reset HEAD~`
+ 1051  git reset HEAD~1
+ 1052  git status
+ 1053  gvim out.dat 
+ 1054  git status
+ 1055  git add .
+ 1056  git commit
+ 1057  git push origin master
+ 1058  git status
+ 1059  git diff
+ 1060  git commit 
+ 1061  clear
+ 1062  ll
+ 1063  gvim out.dat 
+ 1064  git status
+ 1065  gvim outldat
+ 1066  gvim out.dat
+ 1067  git add
+ 1068  git add .
+ 1069  git commit
+ 1070  git push origin master 
+ 1071  arduino-1.8.12/arduino &
+ 1072  cd VENTILATOR/
+ 1073  ll
+ 1074  cd BagTest/
+ 1075  ll
+ 1076  gvim out.dat 
+ 1077  git status
+ 1078  git add .
+ 1079  git commit
+ 1080  git push origin master 
+ 1081  clear
+ 1082  git diff
+ 1083  git add .
+ 1084  git reset ~HEAD
+ 1085  git status
+ 1086  git reset 
+ 1087  git status
+ 1088  gvim out.dat 
+ 1089  git status
+ 1090  git add .
+ 1091  git status
+ 1092  git commit
+ 1093  git status
+ 1094  git push origin master 
+ 1095  clear
+ 1096  git status
+ 1097  pwd
+ 1098  ll
+ 1099  git diff
+ 1100  clear
+ 1101  gitk --all &
+ 1102  gvim out.dat 
+ 1103  git status
+ 1104  git add 
+ 1105  git add .
+ 1106  git commit
+ 1107  git push
+ 1108  git push origin master 
+ 1109  clear
+ 1110  ps auxw | grep cup
+ 1111  killall cups
+ 1112  killall cupsd
+ 1113  sudo service cupsd restart
+ 1114  sudo /etc/init.d/cups restart
+ 1115  gvim out.dat 
+ 1116  diff
+ 1117  git diff
+ 1118  git status 
+ 1119  git add .
+ 1120  git commit
+ 1121  git push origin master
+ 1122  clear
+ 1123  ssh dt
+ 1124  gvim .bashrc 
+ 1125  arduino-1.8.12/arduino &
+ 1126  gti status
+ 1127  cd VENTILATOR/BagTest/
+ 1128  ll
+ 1129  git diff
+ 1130  tail out.dat 
+ 1131  ping dt
+ 1132  clear
+ 1133  ll
+ 1134  bing dt
+ 1135  sudo bing dt
+ 1136  ping dt
+ 1137  clear
+ 1138  ll
+ 1139  ssh root@192.168.42.1
+ 1140  ping dt
+ 1141  clear
+ 1142  gvim out.dat 
+ 1143  git status
+ 1144  git add .
+ 1145  git commit
+ 1146  git status
+ 1147  git push origin master
+ 1148  gitk --all &
+ 1149  find ~ | grep -i Cialas 
+ 1150  find ~ | grep -i ods
+ 1151  gvim out.dat 
+ 1152  t 
+ 1153  git stat
+ 1154  git status
+ 1155  git add .
+ 1156  git commit
+ 1157  git status
+ 1158  gitk --all 
+ 1159  gvim out.dat 
+ 1160  git statuus
+ 1161  git status
+ 1162  git add .
+ 1163  git commit
+ 1164  git push origin master
+ 1165  gvim out.dat 
+ 1166  git status
+ 1167  git add out.dat 
+ 1168  git status
+ 1169  git commit
+ 1170  git push origin master 
+ 1171  clear
+ 1172  git status
+ 1173  git add out.dat 
+ 1174  ll
+ 1175  git status
+ 1176  gvim out.dat 
+ 1177  git status
+ 1178  git add out.dat 
+ 1179  ll
+ 1180  git status
+ 1181  git commit
+ 1182  git push origin master
+ 1183  gvim out.dat 
+ 1184  git statu
+ 1185  git sta
+ 1186  git stat
+ 1187  git status
+ 1188  git add .
+ 1189  git status
+ 1190  git commit 
+ 1191  git push origin master
+ 1192  git status
+ 1193  git add .
+ 1194  git commit
+ 1195  gvim out.dat 
+ 1196  git add .
+ 1197  git status
+ 1198  git commit
+ 1199  git push origin master 
+ 1200  git status
+ 1201  git add .
+ 1202  git commit
+ 1203  clear
+ 1204  git push origin master 
+ 1205  gvim out.dat 
+ 1206  git commit
+ 1207  git add 
+ 1208  git add .
+ 1209  git commit 
+ 1210  git push origin
+ 1211  clear
+ 1212  git status
+ 1213  clear
+ 1214  cd ..
+ 1215  cd ROBS_LIGHT_TOWER/
+ 1216  ll
+ 1217  mkdir REPO
+ 1218  cd REPO
+ 1219  git clone https://github.com/degnarraer/Arduino.git
+ 1220  git 
+ 1221  ll
+ 1222  cd Arduino/
+ 1223  ll
+ 1224  git fetch --tags 
+ 1225  git pull
+ 1226  cd LightTower/
+ 1227  ll
+ 1228  grep -i timer *
+ 1229  gvim ADCSampler.cpp 
+ 1230  cd ..
+ 1231  grep -r TC_CMR_WAVE 
+ 1232  cd ..
+ 1233  cd arduino-1.8.12/
+ 1234  grep -r TC_CMR_WAVE 
+ 1235  grep -r TC0 *
+ 1236  grep -r TC1 *
+ 1237  grep -r TC2 *
+ 1238  grep -r TC2 * | grep for
+ 1239  grep -r TC1 * | grep for
+ 1240  grep -r TC1 * | grep For
+ 1241  grep -r TC1 * | grep -v form | grep for
+ 1242  grep -r TC1 * 
+ 1243  grep TC_FOR_TIMER -r 
+ 1244  grep TC2 -r
+ 1245  grep TC3 -r
+ 1246  grep TC4 -r
+ 1247  clear
+ 1248  ll
+ 1249  cd ../ROBS_LIGHT_TOWER/
+ 1250  ll
+ 1251  cd REPO/
+ 1252  ll
+ 1253  cd Arduino/
+ 1254  ll
+ 1255  grep -r TC
+ 1256  grep -r TC0
+ 1257  grep -r TC1
+ 1258  grep -r TC2
+ 1259  grep -r TC3
+ 1260  find | grep Hop
+ 1261  find | grep EZ
+ 1262  ssh 192.168.1.197 -X -Y 
+ 1263  ssh pi@192.168.1.197 -X -Y 
+ 1264  ll
+ 1265  cd TIMELAPSE/
+ 1266  ll
+ 1267  mv timelapse.mp4 timelapse_ON_xps15_before.mp4
+ 1268  clear
+ 1269  ll
+ 1270  scp pi@192.168.1.197:~/TIMELAPSE/timelapse.mp4 .
+ 1271  nautilus .
+ 1272  scp pi@192.168.1.197:~/TIMELAPSE/timelapse.mp4 .
+ 1273  nautilus . &
+ 1274  ll
+ 1275  scp pi@192.168.1.197:~/TIMELAPSE/timelapse.mp4 .
+ 1276  nautilus .& 
+ 1277  ~/arduino-1.8.12/arduino &
+ 1278  scp pi@192.168.1.197:~/TIMELAPSE/timelapse.mp4 .
+ 1279  cd /etc/
+ 1280  killall nouveau
+ 1281  ps auxw  | nov
+ 1282  ps auxw  | grep  nov
+ 1283  ll
+ 1284  cd /etc/init.d/
+ 1285  ll
+ 1286  grep touch *
+ 1287  grep mouse *
+ 1288  clear
+ 1289  ssh pi@192.168.1.197 -X -Y 
+ 1290  ll
+ 1291  cd arduino-1.8.12/
+ 1292  ll
+ 1293  ./arduino
+ 1294  j
+ 1295  ll
+ 1296  ssh pi@192.168.1.133 -X -Y 
+ 1297  cd TIMELAPSE/
+ 1298  ll
+ 1299  dmesg
+ 1300  j
+ 1301  scp pi@192.168.1.197:~/TIMELAPSE/timelapse.mp4 .
+ 1302  nautilus . &
+ 1303  ssh -XY pi@192.168.1.133
+ 1304  ll
+ 1305  cd ../Downloads/
+ 1306  ll
+ 1307  ll -rt 
+ 1308  sudo apt install xz-utils 
+ 1309  man xz
+ 1310  sudo apt install xz-utils 
+ 1311  man xz
+ 1312  unxz arduino-1.8.12-linux
+ 1313  unxz arduino-1.8.12-linuxarm.tar.xz 
+ 1314  arduino-1.8.12-linux64 (1).tar.xz  arduino-1.8.12-linux64.tar.xz
+ 1315  ping 192.168.1.133
+ 1316  ping dt
+ 1317  bing
+ 1318  sudo bing 192.168.1.133
+ 1319  man bing
+ 1320  sudo bing -D 192.168.1.133
+ 1321  man bing
+ 1322  sudo bing -D 192.168.1.133
+ 1323  sudo bing 192.168.1.133 -D
+ 1324  sudo bing 192.168.1.133 
+ 1325  fg
+ 1326  clear
+ 1327  ping google.com
+ 1328  ping -f 192.168.1.133
+ 1329  sudo ping -f 192.168.1.133
+ 1330  cd TIMELAPSE/
+ 1331  ll
+ 1332  scp pi@192.168.1.197:~/TIMELAPSE/timelapse_HH_Blow*.mp4 .
+ 1333  scp pi@192.168.1.197:~/TIMELAPSE/timelapse_*.mp4 .
+ 1334  ll
+ 1335  clear
+ 1336  ll
+ 1337  ll -rt image | tail
+ 1338  ll -rt image* | tail
+ 1339  scp pi@192.168.1.197:~/TIMELAPSE/timelapse.mp4 .
+ 1340  ll
+ 1341  pwd
+ 1342  ll
+ 1343  scp pi@192.168.1.197:~/TIMELAPSE/HH_BLOWOUT/timelapse.mp4 .
+ 1344  ll
+ 1345  mv timelapse.mp4 timelapse_HH_Blowout_20200516.mp4 
+ 1346  ll
+ 1347  scp pi@192.168.1.197:~/TIMELAPSE/timelapse.mp4 .
+ 1348  ll
+ 1349  ll -rt 
+ 1350  rm timelapse.mp4 
+ 1351  scp pi@192.168.1.197:~/TIMELAPSE/timelapse_RITA_End_HH_Chinook.mp4 .
+ 1352  nautilus . &
+ 1353  ssh pi@192.168.1.133 -X -Y 
+ 1354  ll
+ 1355  ssh pi@192.168.1.133 -X -Y 
+ 1356  ping 192.168.1.133
+ 1357  ifconfig
+ 1358  ping 192.158.1.133
+ 1359  ping 192.168.1.133
+ 1360  clear
+ 1361  ping 192.168.1.133
+ 1362  clear
+ 1363  ll
+ 1364  ping 192.168.1.133
+ 1365  ssh pi@192.168.1.133 -X -Y 
+ 1366  cd TIMELAPSE/
+ 1367  ll
+ 1368  scp pi@192.168.1.197:~/TIMELAPSE/timelapse.mp4 .
+ 1369  nautilus . &
+ 1370  scp pi@192.168.1.197:~/TIMELAPSE/timelapse.mp4 .
+ 1371  nautilus . &
+ 1372  sudo apt install vlc 
+ 1373  ll
+ 1374  clear
+ 1375  ll
+ 1376  vlc
+ 1377  clear
+ 1378  ll
+ 1379  scp pi@192.168.1.197:~/TIMELAPSE/timelapse.mp4 .
+ 1380  clear
+ 1381  ll
+ 1382  ll -rt
+ 1383  vlc timelapse.mp4 
+ 1384  scp pi@192.168.1.197:~/TIMELAPSE/timelapse.mp4 .
+ 1385  vlc timelapse.mp4 
+ 1386  scp pi@192.168.1.197:~/TIMELAPSE/timelapse.mp4 .
+ 1387  vlc timelapse.mp4 
+ 1388  cd arduino-1.8.12/
+ 1389  ll
+ 1390  ./arduino &
+ 1391  ssh -XY pi@192.168.1.133
+ 1392  pwd
+ 1393  ssh 
+ 1394  ssh pi@192.168.1.197 -X -Y 
+ 1395  ssh dt 
+ 1396  ssh pi@192.168.1.197 -X -Y 
+ 1397  ssh pi@192.168.1.133 -X -Y 
+ 1398  ll
+ 1399  ssh pi@192.168.1.133 -X -Y 
+ 1400  ping 192.168.1.133
+ 1401  ssh pi@192.168.1.133 -X -Y 
+ 1402  cleawr
+ 1403  clear
+ 1404  ll
+ 1405  ssh pi@192.168.1.133 -X -Y 
+ 1406  clear
+ 1407  ssh pi@192.168.1.133 -X -Y 
+ 1408  clear
+ 1409  ssh pi@192.168.1.133 -X -Y 
+ 1410  ~/arduino-1.8.12/arduino &
+ 1411  clear
+ 1412  ~/arduino-1.8.12/arduino &
+ 1413  git status
+ 1414  ~/arduino-1.8.12/arduino &
+ 1415  ssh pi@192.168.1.133 -X -Y 
+ 1416  ping 192.168.1.133
+ 1417  clear
+ 1418  ssh pi@192.168.1.133 -X -Y 
+ 1419  ping 192.168.1.133
+ 1420  ping 192.168.1.2
+ 1421  n
+ 1422  ping 192.168.1.2
+ 1423  ping 192.168.1.133
+ 1424  ssh pi@192.168.1.133 -X -Y 
+ 1425  cd VENTILATOR/BagTest/
+ 1426  ll
+ 1427  git pull
+ 1428  ~/arduino-1.8.12/arduino &
+ 1429  gvim BagTest.ino 
+ 1430  git diff
+ 1431  ~/arduino-1.8.12/arduino &
+ 1432  grep cpuLoad
+ 1433  grep cpuLoad *
+ 1434  git status
+ 1435  git diff
+ 1436  ll
+ 1437  git status
+ 1438  gvim BagTest.ino 
+ 1439  ~/arduino-1.8.12/arduino &
+ 1440  git status
+ 1441  git add BagTest.ino 
+ 1442  git status
+ 1443  git commit
+ 1444  git push origin master 
+ 1445  git status
+ 1446  ll
+ 1447  git status
+ 1448  givm BagTest.ino 
+ 1449  gvim BagTest.ino 
+ 1450  ~/arduino-1.8.12/arduino &
+ 1451  git status
+ 1452  git add BagTest.ino 
+ 1453  git add fs6122.*
+ 1454  git add wdog.*
+ 1455  ll
+ 1456  git status
+ 1457  git commit
+ 1458  git push origin master 
+ 1459  git satus
+ 1460  git status
+ 1461  git add BagTest.ino 
+ 1462  git add wdog.cpp 
+ 1463  gvim .gitignore 
+ 1464  git status
+ 1465  git add 
+ 1466  git add .
+ 1467  git status
+ 1468  git commit
+ 1469  git diff master
+ 1470  git commit
+ 1471  git reset --hard HEAD
+ 1472  git status
+ 1473  git reset --hard HEAD
+ 1474  git status
+ 1475  git commit
+ 1476  git push origin master
+ 1477  gitk --all &
+ 1478  git status
+ 1479  clear
+ 1480  ll
+ 1481  clear
+ 1482  ll
+ 1483  gvim BagTest.ino 
+ 1484  git diff
+ 1485  jk
+ 1486  git diff
+ 1487  ~/arduino-1.8.12/
+ 1488  ~/arduino-1.8.12/arduino
+ 1489  git status
+ 1490  git add 
+ 1491  git add .
+ 1492  git commit
+ 1493  git push origin master 
+ 1494  git pull
+ 1495  clear
+ 1496  gvim BagTest.ino 
+ 1497  ~/arduino-1.8.12/arduino &
+ 1498  git status
+ 1499  git add .
+ 1500  git commit
+ 1501  git push origin master 
+ 1502  ~/arduino-1.8.12/arduino &
+ 1503  git add .
+ 1504  git status
+ 1505  git commit
+ 1506  git status
+ 1507  git diff
+ 1508  git diff master
+ 1509  git commit
+ 1510  git push origin master 
+ 1511  git status
+ 1512  git diff
+ 1513  ~/arduino-1.8.12/arduino &
+ 1514  git add .
+ 1515  git commit
+ 1516  git status
+ 1517  gitk --all &
+ 1518  git push origin master 
+ 1519  git status
+ 1520  git diff
+ 1521  git fetch --tags
+ 1522  git status
+ 1523  git pull
+ 1524  git checkout BagTest.ino
+ 1525  git status
+ 1526  git pull
+ 1527  git status
+ 1528  ll
+ 1529  clear
+ 1530  git status
+ 1531  git add .
+ 1532  git reset --hard
+ 1533  git status
+ 1534  git reset --hard HEAD
+ 1535  git status
+ 1536  git diff
+ 1537  git add . ;
+ 1538  git status
+ 1539  git commit
+ 1540  git status
+ 1541  git add .
+ 1542  git commit
+ 1543  git push origin master 
+ 1544  git diff
+ 1545  git status
+ 1546  gvim BagTest.ino 
+ 1547  ll
+ 1548  git status
+ 1549  git add . 
+ 1550  git commit
+ 1551  git reset --hard HEAD
+ 1552  ll
+ 1553  ~
+ 1554  ~/arduino-1.8.12/arduino &
+ 1555  q
+ 1556  git status
+ 1557  git add .
+ 1558  git commit
+ 1559  git push origin master
+ 1560  git diff
+ 1561  git diff master
+ 1562  git diff origin master
+ 1563  git diff master
+ 1564  git fetch --tags 
+ 1565  git status
+ 1566  gitk --all &
+ 1567  git status
+ 1568  git diff
+ 1569  gvim BagTest.ino 
+ 1570  gitk --all &*
+ 1571  grep Close *
+ 1572  git status
+ 1573  git add .
+ 1574  git commit
+ 1575  git push origin master
+ 1576  git pull
+ 1577  ll
+ 1578  clear
+ 1579  git status
+ 1580  git diff
+ 1581  git add .
+ 1582  git commit
+ 1583  git push origin master 
+ 1584  ll
+ 1585  cd VENTILATOR/
+ 1586  lld
+ 1587  cd Ba
+ 1588  cd BagTest/
+ 1589  ll
+ 1590  nautilus . &
+ 1591  ssh pi@192.168.1.133 -X -Y 
+ 1592  ll
+ 1593  git diff
+ 1594  git status
+ 1595  git add .
+ 1596  git status
+ 1597  git commit
+ 1598  git push origin master 
+ 1599  git pull
+ 1600  git status
+ 1601  git push origin master 
+ 1602  ll
+ 1603  ssh pi@192.168.1.133 -X -Y 
+ 1604  ssh pi@192.168.1.197 -X -Y 
+ 1605  git status
+ 1606  git pull
+ 1607  git status
+ 1608  git add .
+ 1609  cd DATA/
+ 1610  ll
+ 1611  gvim NewMotorData.csv 
+ 1612  git status
+ 1613  git add .
+ 1614  git status
+ 1615  git comming
+ 1616  git commit
+ 1617  git push origin master 
+ 1618  clear
+ 1619  ll
+ 1620  git status
+ 1621  head out.dat 
+ 1622  head NewMotorData.csv 
+ 1623  clear
+ 1624  ll
+ 1625  git status
+ 1626  git add .
+ 1627  git commit
+ 1628  git push origin master 
+ 1629  git status
+ 1630  clear
+ 1631  killall ssh
+ 1632  ll
+ 1633  cat NewMotorData.csv 
+ 1634  gvim  NewMotorData.csv 
+ 1635  git pull
+ 1636  killall ssh
+ 1637  ps auxw |  grep ssh
+ 1638  ps auxw |  grep screen
+ 1639  ll
+ 1640  cldar
+ 1641  ll
+ 1642  cldar
+ 1643  ll
+ 1644  cldar
+ 1645  clear
+ 1646  ll
+ 1647  killall ssh
+ 1648  cd VENTILATOR/BagTest/
+ 1649  ll
+ 1650  git pull
+ 1651  git status
+ 1652  ll 
+ 1653  ll
+ 1654  cd ..
+ 1655  ll
+ 1656  git status
+ 1657  cd BagTest/
+ 1658  git status
+ 1659  git pull
+ 1660  killall zoom
+ 1661  rd Yep. Of all the cans of paint to knock over on the carpeting, he just had to choose RED!
+ 1662  1
+ 1663  Hide or report this
+ 1664  Like
+ 1665  Lawrence Maushard
+ 1666  Lawrence Maushard Kristen Elizabeth Meierkord We still love that prankster !
+ 1667  1
+ 1668  ssh pi@192.168.1.133 -X -Y 
+ 1669  git pull
+ 1670  git status
+ 1671  cd DATA/
+ 1672  ll
+ 1673  cat New
+ 1674  cat NewMotorData.csv 
+ 1675  ll
+ 1676  git status
+ 1677  cd ..
+ 1678  git status
+ 1679  ssh pi@192.168.1.133 -X -Y 
+ 1680  ll
+ 1681  git status
+ 1682  ssh pi@192.168.1.133 -X -Y 
+ 1683  ping 192.168.197
+ 1684  clear
+ 1685  ping 192.168.1.197
+ 1686  ssh pi@192.168.1.197 -X -Y 
+ 1687  cd VENTILATOR/
+ 1688  cd BagTest/
+ 1689  ll
+ 1690  clear
+ 1691  git pull 
+ 1692  ll
+ 1693  cd ../../
+ 1694  cd TIMELAPSE/
+ 1695  ll
+ 1696  scp pi@192.168.1.197:~/TIMELAPSE/timelapse_Stout_06062020.mp4 .
+ 1697  nautilus .
+ 1698  whois yhdc.com
+ 1699  sudo apt install whois
+ 1700  git status
+ 1701  whois yhdc.com
+ 1702  clear
+ 1703  git pull
+ 1704  cd VENTILATOR/BagTest/
+ 1705  ll
+ 1706  git pull
+ 1707  git status
+ 1708  make upload
+ 1709  clear
+ 1710  ll
+ 1711  pwd
+ 1712  clear
+ 1713  ll
+ 1714  cd VENTILATOR/
+ 1715  ll
+ 1716  cd BagTest/
+ 1717  ll
+ 1718  cd DO
+ 1719  cd DOC
+ 1720  ll
+ 1721  cd ..
+ 1722  cd Ba
+ 1723  ll
+ 1724  cd Basic/
+ 1725  ll
+ 1726  cd Ba
+ 1727  cd ..
+ 1728  cd BagTest/
+ 1729  ll
+ 1730  clear
+ 1731  ll
+ 1732  make upload 
+ 1733  git pull
+ 1734  git status
+ 1735  ssh pi@192.168.1.197 -X -Y 
+ 1736  ssh pi@192.168.1.133 -X -Y 
+ 1737  ssh pi@192.168.1.197 -X -Y 
+ 1738  git status
+ 1739  git pull
+ 1740  make upload 
+ 1741  ssh pi@192.168.1.133 -X -Y 
+ 1742  git pull
+ 1743  gvim BagTest.ino 
+ 1744  gvim out.csv 
+ 1745  gitk --all &
+ 1746  ssh pi@192.168.1.133 -X -Y 
+ 1747  clear
+ 1748  ssh pi@192.168.1.133 -X -Y 
+ 1749  ssh pi@192.168.1.133 -X -Y 
+ 1750  ll
+ 1751  cd VENTILATOR/
+ 1752  cd BagTest/
+ 1753  ll
+ 1754  gvim fs6122.h fs6122.cpp -c
+ 1755  gvim fs6122.h fs6122.cpp -o
+ 1756  git pull
+ 1757  git status
+ 1758  git add .
+ 1759  git commit 
+ 1760  git push origin master 
+ 1761  git status
+ 1762  git add .
+ 1763  git commit
+ 1764  git push orgin master 
+ 1765  git push origin master 
+ 1766  git status
+ 1767  ll
+ 1768  clear
+ 1769  ll
+ 1770  clear
+ 1771  ll
+ 1772  ssh pi@192.168.1.133 -X -Y 
+ 1773  scp pi@192.168.1.133:~/VENTILATOR_CODE/BagTest/out.csv .
+ 1774  ll
+ 1775  scp pi@192.168.1.133:~/VENTILATOR_CODE/BagTest/out.csv .
+ 1776  cd VENTILATOR/BagTest/
+ 1777  ll
+ 1778  git status
+ 1779  git add .
+ 1780  git push
+ 1781  git commit
+ 1782  ll
+ 1783  mv out_* DATA
+ 1784  ll
+ 1785  git status
+ 1786  git reset HEAS
+ 1787  git reset HEAD
+ 1788  git status
+ 1789  git add .
+ 1790  git commit
+ 1791  git reset HEAD
+ 1792  git status
+ 1793  clear
+ 1794  ll DOC
+ 1795  git pull
+ 1796  git add .
+ 1797  git commit
+ 1798  git push origin master
+ 1799  ll
+ 1800  pwd
+ 1801  ll
+ 1802  cd VENTILATOR/
+ 1803  ll
+ 1804  scp pi@192.168.1.133:~/VENTILATOR_CODE/BagTest/out.csv .
+ 1805  /ssh
+ 1806  ssh pi@192.168.1.133 -X -Y 
+ 1807  cd BagTest/
+ 1808  ll
+ 1809  gvim BagTest.ino 
+ 1810  git pull 
+ 1811  ll
+ 1812  gvim BagTest.ino 
+ 1813  gvim out.csv 
+ 1814  gvim BagTest.ino 
+ 1815  gitk --all &
+ 1816  gvim 
+ 1817  gvim out.csv 
+ 1818  gitk --all &
+ 1819  ssh pi@192.168.1.133 -X -Y 
+ 1820  find | grep SIARGO
+ 1821  ll
+ 1822  ifconfig
+ 1823  grep 192.168.42 /var/log/*
+ 1824  ifconfig
+ 1825  grep 192.168.42 /var/log/*
+ 1826  cd VENTILATOR/BagTest/
+ 1827  ll
+ 1828  git pull
+ 1829  gvim out.csv 
+ 1830  gitk --all &
+ 1831  ll
+ 1832  mv ~/Downloads/ACS712.PDF DOC/
+ 1833  git status
+ 1834  t
+ 1835  git status
+ 1836  git status 
+ 1837  git add .
+ 1838  git commit
+ 1839  git status
+ 1840  git push origin master 
+ 1841  git status
+ 1842  git pull
+ 1843  pwd
+ 1844  ll
+ 1845  whomi
+ 1846  whoami
+ 1847  wpdw
+ 1848  wd
+ 1849  pwd
+ 1850  cd ~/Downloads/
+ 1851  ll
+ 1852  ll -rt
+ 1853  gvim Bagtest_plot.ipynb 
+ 1854  pip install ipython
+ 1855  sudo install pip
+ 1856  sudo apt install pip
+ 1857  get-pip.py
+ 1858  curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py
+ 1859  sudo apt install curl
+ 1860  curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py
+ 1861  ./get-pip.py
+ 1862  ll get-pip.py 
+ 1863  gvim get-pip.py 
+ 1864  which python
+ 1865  chmod +x get-pip.py 
+ 1866  ./get-pip.py 
+ 1867  pip install ipython
+ 1868  sudo ./get-pip.py 
+ 1869  git status
+ 1870  pip
+ 1871  p
+ 1872  pip install ipython
+ 1873  ipython nbconvert 
+ 1874  ll -rt
+ 1875  ipython nbconvert Bagtest_plot.ipynb 
+ 1876  ipythong
+ 1877  sudo pip install ipython
+ 1878  ipython nbconvert Bagtest_plot.ipynb 
+ 1879  jupyter  nbconvert Bagtest_plot.ipynb 
+ 1880  sudo apt install jupyter 
+ 1881  jupyter  nbconvert Bagtest_plot.ipynb 
+ 1882  gvim Bagtest_plot.
+ 1883  gvim Bagtest_plot.html 
+ 1884  ll Bagtest_plot.*
+ 1885  gvim Bagtest_plot.py
+ 1886  python Bagtest_plot.py 
+ 1887  ipython Bagtest_plot.py 
+ 1888  clear
+ 1889  ll
+ 1890  ll Bagtest_plot.py 
+ 1891  chmod +x Bagtest_plot.py
+ 1892  ./Bagtest_plot.py
+ 1893  gvim Bagtest_plot.py 
+ 1894  ./Bagtest_plot.py
+ 1895  clear
+ 1896  jupyter-notebook 
+ 1897  sudo pip install matplotlig
+ 1898  sudo pip install matplotlib
+ 1899  jupyter-notebook  &
+ 1900  clear
+ 1901  mkdir ~/VENTILATOR/BagTestPlot
+ 1902  mv Bagtest_plot.* ~/VENTILATOR/BagTestPlot/
+ 1903  cd ~/VENTILATOR/BagTestPlot
+ 1904  ll
+ 1905  cp ../BagTest/out.csv .
+ 1906  ll
+ 1907  gvim Bagtest_plot.ipynb 
+ 1908  jupyter-notebook &
+ 1909  sudo pip install pandas
+ 1910  sudo pip install matplotlib
+ 1911  sudo pip install matplotlib notebook
+ 1912  jupyter-notebook Bagtest_plot.ipynb &
+ 1913  q
+ 1914  ps auxw | grep Bag
+ 1915  fg
+ 1916  ps auxw | grep Bag
+ 1917  clear
+ 1918  jupyter-notebook Bagtest_plot.ipynb &
+ 1919  jupyter notebook &
+ 1920  install matplotlib, numpy;
+ 1921  conda install matplotlib, numpy;
+ 1922  sudo apt install conda 
+ 1923  conda install {matplotlib}
+ 1924  apropos conda
+ 1925  clear
+ 1926  python -c "from pylab import *; plot(); show()" --verbose-helpful
+ 1927  pip install matplotlib
+ 1928  sudo pip install matplotlib
+ 1929  python -c "from pylab import *; plot(); show()" --verbose-helpful
+ 1930  sudo apt install python-tk
+ 1931  sudo apt install matplotlib
+ 1932  python -c "from pylab import *; plot(); show()" --verbose-helpful
+ 1933  ps auxw | grep Bag
+ 1934  killall python
+ 1935  kill -9 22177
+ 1936  ll
+ 1937  python -c "from pylab import *; plot(); show()" --verbose-helpful
+ 1938  jupyter-notebook Bagtest_plot.ipynb &
+ 1939  kkkk
+ 1940  python -c "from pylab import *; plot(); show()" --verbose-helpful
+ 1941  fg
+ 1942  ps auxw | grep jupyter
+ 1943  killall -9 22297
+ 1944  ps auxw | grep jupyter
+ 1945  kill -9 22297
+ 1946  killall -9 22297
+ 1947  ps auxw | grep jupyter
+ 1948  clear
+ 1949  ll
+ 1950  jupyter-notebook Bagtest_plot.ipynb 
+ 1951  get_ipython().magic('matplotlib inline')
+ 1952  get_ipython 'matplotlib inline'
+ 1953  ipython 'matplotlib inline'
+ 1954  ipython matplotlib inline
+ 1955  ll
+ 1956  jupyter-notebook Bagtest_plot.ipynb 
+ 1957  python -m pip install -U matplotlib
+ 1958  sudo python -m pip install -U matplotlib
+ 1959  sudo apt upgrade
+ 1960  cd /etc/
+ 1961  find | grep ppa
+ 1962  find | grep ppa | grep apparmor
+ 1963  find | grep ppa | grep -v apparmor
+ 1964  sudo find | grep ppa | grep -v apparmor
+ 1965  sudo gvim apt/sources.list.d/deadsnakes-ubuntu-ppa-eoan.list 
+ 1966  sudo rm apt/sources.list.d/deadsnakes-ubuntu-ppa-eoan.list 
+ 1967  ll
+ 1968  sudo find | grep ppa | grep -v apparmor
+ 1969  sudo rm ./apt/trusted.gpg.d/deadsnakes_ubuntu_ppa.gpg
+ 1970  ssh pi@192.168.1.133 -X -Y 
+ 1971  clear
+ 1972  ssh pi@192.168.1.133 -X -Y 
+ 1973  ssh dt2
+ 1974  ssh dt
+ 1975  ll
+ 1976  cd VENTILATOR/
+ 1977  ll
+ 1978  cd BagTestPlot/
+ 1979  ll
+ 1980  jupyter notepad Bagtest_plot.ipynb 
+ 1981  jupyter-notebook Bagtest_plot.ipynb 
+ 1982  ps axuw | grep cups
+ 1983  /etc/init.d/cups restart
+ 1984  ssh pi@192.168.1.197 -X -Y 
+ 1985  ll
+ 1986  cd VENTILATOR/BagTestPlot/
+ 1987  ll
+ 1988  gvim out.csv 
+ 1989  ll
+ 1990  cat Bagtest_plot.ipynb 
+ 1991  gvim Bagtest_plot.ipynb 
+ 1992  ps auxw anacon
+ 1993  ps auxw | grep anacon
+ 1994  killall 
+ 1995  ps auxw | grep anacon
+ 1996  kill -9 52026
+ 1997  kill -9 52027
+ 1998  kill -9 52034
+ 1999  kill -9 52092
+ 2000  kill -9 52093
+ 2001  kill -9 52100
+ 2002  kill -9 52256
+ 2003  ps auxw | grep anacon
+ 2004  killl -9 59092
+ 2005  ps auxw | grep anacon
+ 2006  kill -9 59092
+ 2007  kill -9 59093
+ 2008  kill -9 59100
+ 2009  kill -9 59254
+ 2010  kill -9 59256
+ 2011  kill -9 76018
+ 2012  kill -9 76229
+ 2013  ps auxw | grep anacon
+ 2014  clear
+ 2015  ll
+ 2016  jupyter-notebook Bagtest_plot.ipynb 
+ 2017  ps auxw | grep anacon
+ 2018  apropos anaconda
+ 2019  which anaconda
+ 2020  ps auxw | grep anaconda
+ 2021  history | less
+ 2022  history
+ 2023  history > history.txt
