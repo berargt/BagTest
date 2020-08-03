@@ -20,10 +20,11 @@
 // comment this for normal operation
 #define TIMESTAMP_DATA_OUTPUT
 
-#define START_PWM_SPEED   150
-#define CLOSE_DWELLMS     1000
+#define START_PWM_SPEED   120
+#define CLOSE_DWELLMS     100
 #define OPEN_SPEED        150
 #define REQ_VOLUME        500
+#define MAX_CLOSE_MS      1400
 
 // position definitions
 #define OPEN_POS_ADD  250
@@ -222,7 +223,7 @@ void Sequence(void) {
       break;
 
     case CLOSE_SEQ:
-      if (abs(accumVolume())>= (float)REQ_VOLUME) {
+      if (abs(accumVolume())>= (float)REQ_VOLUME || (millis() - seqStartms) > MAX_CLOSE_MS) {
         nextms = millis() + CLOSE_DWELLMS;
         state = CLOSE_DWELL_SEQ;
         pwmSpeed = 0;
