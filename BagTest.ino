@@ -5,20 +5,18 @@
 /* Code to test the Ambu Bag and Ventilator Fixture                           */
 /******************************************************************************/
 #include <Wire.h>
-#include <LiquidCrystal_I2C.h>
 #include <Encoder.h>
 #include <stdio.h>
-#include <Adafruit_Sensor.h>
-//#include <Adafruit_BME280.h>
-#include <Streaming.h>  // cout <iostream> functionality using Serial << endl;
-#include <avr/wdt.h>    // add the dog
+#include <Adafruit_Sensor.h>  // Adafruit_Unified_Sensor
+#include <Streaming.h>        // cout <iostream> functionality using Serial << endl;
+#include <avr/wdt.h>          // add the dog
 #include "fs6122.h"
 #include "wdog.h"
 
 // defines
 
 // comment this for normal operation
-#define TIMESTAMP_DATA_OUTPUT
+//#define TIMESTAMP_DATA_OUTPUT
 
 #define START_PWM_SPEED   120
 #define CLOSE_DWELLMS     100
@@ -52,6 +50,7 @@ enum sequence {
 };
 
 // Globals
+bool run = false;
 uint8_t dir;
 long position;
 long maxOpenPos;
@@ -72,31 +71,20 @@ float accumVolml;
   pressure_flow_type fs6122;
 
 // Classes
-//Adafruit_BME280 bme; 
 Encoder myEnc(18, 19);  // use interrupt pins
-LiquidCrystal_I2C lcd(0x27, 20, 4); // LCD address 0x27 20 chars 4 line display
 
 /******************************************************************************/
 /* Setup                                                                      */
 /******************************************************************************/
 void setup()
 {
-  lcd.init();
-  lcd.backlight();
-  lcd.home();
 
-  lcd.print("Initializing...");
-  lcd.setCursor(0, 1);
   pinMode(PAUSE_SW, INPUT_PULLUP);
-  lcd.print("Ambu Bag Fixture!");
   // This delay is enough time to program if there are issues with the code/programming
   delay(3000);
   Serial3.begin(115200);
   while(!Serial3);    // time to get serial running
-  Serial3 << "Starting BagTest Fixture!" << endl;
-
-  //Init BME280 sensor
-//  bme.begin(BME280_ADDRESS_ALTERNATE);
+  Serial3 << "Starting BagTest Fixture!" << "\r";
 
   //Init Flowmeter
   fs6122_init();
@@ -124,28 +112,36 @@ void loop()
 
   markLoopStart();
 
-  fs6122_readSmlpM_umH2O(&fs6122);
-#ifdef TIMESTAMP_DATA_OUTPUT
-//  float temperature;
-//  temperature = bme.readTemperature();
-#endif
-  position = myEnc.read();
+//  getCommand();
 
-  // Communication with RaspberryPi
+  // disable the getCommand so it will run
+  run = true;
+
+  if (run == true) {
+
+    fs6122_readSmlpM_umH2O(&fs6122);
+    position = myEnc.read();
+
+    // Communication with RaspberryPi
 #ifdef TIMESTAMP_DATA_OUTPUT
-  Serial3 << millis() << "," << fs6122.mSLPM << "," << fs6122.umH2O << ","
-                      << position << "," << dir << "," << pwmSpeed << "," 
-                      << analogRead(A0) << "," << accumVolml << "\r";
+    Serial3 << millis() << "," << fs6122.mSLPM << "," << fs6122.umH2O << ","
+      << position << "," << dir << "," << pwmSpeed << "," 
+      << analogRead(A0) << "," << accumVolml << "\r";
 #else
-  Serial3 << fs6122.flow_rate << "," << fs6122.pressure << "," << cpuLoad << endl;
+    Serial3 << fs6122.mSLPM << "," << fs6122.umH2O << "," << accumVolml << "\r";
 #endif
 
-  Sequence();
+    Sequence();
 
-  digitalWrite(DIR_PIN, dir);
-  analogWrite(PWM_PIN, pwmSpeed);
+    digitalWrite(DIR_PIN, dir);
+    analogWrite(PWM_PIN, pwmSpeed);
 
-  //  displayLCD();
+  }
+  else {
+    // Stop
+    analogWrite(PWM_PIN, 0);
+  }
+
   wdog_reset();
   markLoopEnd();
 }
@@ -158,10 +154,6 @@ void loop()
 /******************************************************************************/
 void Home(void) {
   uint8_t homeSpeed = 25; // go slow
-
-  lcd.clear(); //display status of motor on LCD
-  lcd.setCursor(0, 0);
-  lcd.print("Homing...");
 
   analogWrite(PWM_PIN, homeSpeed);
   openSwState = digitalRead(OPEN_SW);
@@ -178,13 +170,9 @@ void Home(void) {
 
   do {
     openSwState = digitalRead(OPEN_SW);
-    lcd.setCursor(0, 1); lcd.print("SW:");lcd.print(openSwState);
     maxOpenPos = myEnc.read();
-    lcd.setCursor(0, 2); lcd.print("POS:"); lcd.print(maxOpenPos);
     wdog_reset();
   } while (openSwState == 1);
-
-  lcd.setCursor(0, 3); lcd.print("Done!");
 
   // Start Closing to avoid switch closure detection
   digitalWrite(DIR_PIN, CLOSE);
@@ -266,26 +254,6 @@ void Sequence(void) {
   }
 }
 
-/******************************************************************************/
-/* displayLCD                                                                 */
-/*                                                                            */
-/* display data to the LCD                                                    */
-/******************************************************************************/
-void displayLCD(void) {
-  lcd.clear(); //display status of motor on LCD
-  lcd.setCursor(0, 0);
-  lcd.print("CURPOS:");
-  lcd.print(position);
-  lcd.setCursor(0, 1);
-  lcd.print("OPEN POS:");
-  lcd.print(maxOpenPos);
-  lcd.setCursor(0, 2);
-  lcd.print("CLOSE POS:"); lcd.print(closePos);
-  lcd.setCursor(0, 3);
-  //  lcd.print("POS:");
-  //  lcd.print(position); // DUPE TBD TODO;
-}
-
 //////////////////////////////////////////////////////
 // Loop Timing
 void markLoopStart(){
@@ -315,9 +283,24 @@ float accumVolume(void) {
   float volumeml = ((float)fs6122.mSLPM/60000.0)*timeSliceMS; 
 
   lastms = currentMS;
-
-//  Serial3 << "\r*****" << timeSliceMS << " " << volumeml << "*****\r";
   accumVolml += volumeml;
 
   return accumVolml;
+}
+
+/******************************************************************************/
+/* getCommand                                                                 */
+/*                                                                            */
+/******************************************************************************/
+void getCommand() {
+
+  String command = Serial3.readString();
+
+  if (command.equals("run")) {
+    run = true;
+  }
+
+  if (command.equals("stop")) {
+    run = false;
+  }
 }
