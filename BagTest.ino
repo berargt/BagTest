@@ -18,7 +18,7 @@
 // defines
 
 // comment this for normal operation
-#define TIMESTAMP_DATA_OUTPUT
+//#define TIMESTAMP_DATA_OUTPUT
 
 #define START_PWM_SPEED   120
 #define CLOSE_DWELLMS     100
@@ -137,7 +137,7 @@ void loop()
                       << position << "," << dir << "," << pwmSpeed << "," 
                       << analogRead(A0) << "," << accumVolml << "\r";
 #else
-  Serial3 << fs6122.flow_rate << "," << fs6122.pressure << "," << cpuLoad << endl;
+  Serial3 << fs6122.mSLPM << "," << fs6122.umH2O << "," << accumVolml << "\r";
 #endif
 
   Sequence();
