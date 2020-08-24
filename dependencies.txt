@@ -1,0 +1,3 @@
+Adafruit Unified Sensor
+Encoder
+Streaming
